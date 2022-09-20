@@ -1,13 +1,55 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+}
+#App {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#chess-page {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+}
+#chessboard-container {
+  display: flex;
+  align-items: flex-end;
+}
+#chessboard {
+  background-color: green;
+  display: flex;
+  flex-wrap: wrap;
+  width: 800px;
+  height: 800px;
+  border: 2px solid black;
+  box-shadow: 5px 5px 50px rgb(156, 156, 156);
+}
+.tile {
+  height: 100px;
+  width: 100px;
+}
+.white {
+  background-color: aliceblue;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+#letters-row {
+  display: flex;
+  width: 804px;
+}
+.letters {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100px;
+  font-size: 2rem;
+}
+.numbers {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  height: 100px;
+  width: 50px;
+  font-size: 2rem;
 }

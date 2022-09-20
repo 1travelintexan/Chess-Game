@@ -1,8 +1,9 @@
+import Chessboard from "./components/Chessboard";
 
 function App() {
   return (
-    <div className="App">
-
+    <div id="App">
+      <Chessboard />
     </div>
   );
 }
