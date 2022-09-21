@@ -1,4 +1,4 @@
-import React from "react";
+import { v4 as uuidv4 } from "uuid";
 import ChessTile from "./ChessTile";
 import whitePawn from "../images/pawn_w.png";
 import whiteRook from "../images/rook_w.png";
@@ -78,13 +78,14 @@ function Chessboard() {
     }
   }
 
-  console.log(chessboard);
   return (
     <div id="chess-page">
       <div id="chessboard-container">
         <div>
           {numbers.reverse().map((num) => (
-            <span className="numbers">{num}</span>
+            <span key={uuidv4()} className="numbers">
+              {num}
+            </span>
           ))}
         </div>
         <div id="chessboard">
@@ -94,17 +95,21 @@ function Chessboard() {
               (i % 2 !== 0 && e.place[1] % 2 !== 0)
             ) {
               //white tiles with piece image added
-              return <ChessTile white={"white"} piece={e.image} />;
+              return (
+                <ChessTile key={uuidv4()} white={"white"} piece={e.image} />
+              );
             } else {
               //black tiles with piece image added
-              return <ChessTile piece={e.image} />;
+              return <ChessTile key={uuidv4()} piece={e.image} />;
             }
           })}
         </div>
       </div>
       <div id="letters-row">
         {letters.map((e) => (
-          <span className="letters">{e}</span>
+          <span key={uuidv4()} className="letters">
+            {e}
+          </span>
         ))}
       </div>
     </div>
