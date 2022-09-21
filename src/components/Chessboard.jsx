@@ -1,7 +1,17 @@
 import React from "react";
 import ChessTile from "./ChessTile";
 import whitePawn from "../images/pawn_w.png";
+import whiteRook from "../images/rook_w.png";
+import whiteBishop from "../images/bishop_w.png";
+import whiteknight from "../images/knight_w.png";
+import whiteQueen from "../images/queen_w.png";
+import whiteKing from "../images/king_w.png";
 import blackPawn from "../images/pawn_b.png";
+import blackRook from "../images/rook_b.png";
+import blackBishop from "../images/bishop_b.png";
+import blackknight from "../images/knight_b.png";
+import blackQueen from "../images/queen_b.png";
+import blackKing from "../images/king_b.png";
 
 function Chessboard() {
   let chessboard = [];
@@ -15,6 +25,19 @@ function Chessboard() {
     { image: whitePawn, x: "f", y: 2 },
     { image: whitePawn, x: "g", y: 2 },
     { image: whitePawn, x: "h", y: 2 },
+    //white rooks
+    { image: whiteRook, x: "a", y: 1 },
+    { image: whiteRook, x: "h", y: 1 },
+    //white knights
+    { image: whiteknight, x: "b", y: 1 },
+    { image: whiteknight, x: "g", y: 1 },
+    //white bishops
+    { image: whiteBishop, x: "c", y: 1 },
+    { image: whiteBishop, x: "f", y: 1 },
+    //white Queen
+    { image: whiteQueen, x: "d", y: 1 },
+    //white king
+    { image: whiteKing, x: "e", y: 1 },
     //black pawns
     { image: blackPawn, x: "a", y: 7 },
     { image: blackPawn, x: "b", y: 7 },
@@ -24,6 +47,19 @@ function Chessboard() {
     { image: blackPawn, x: "f", y: 7 },
     { image: blackPawn, x: "g", y: 7 },
     { image: blackPawn, x: "h", y: 7 },
+    //black rooks
+    { image: blackRook, x: "a", y: 8 },
+    { image: blackRook, x: "h", y: 8 },
+    //black knights
+    { image: blackknight, x: "b", y: 8 },
+    { image: blackknight, x: "g", y: 8 },
+    //white bishops
+    { image: blackBishop, x: "c", y: 8 },
+    { image: blackBishop, x: "f", y: 8 },
+    //white Queen
+    { image: blackQueen, x: "d", y: 8 },
+    //black king
+    { image: blackKing, x: "e", y: 8 },
   ];
   let letters = ["a", "b", "c", "d", "e", "f", "g", "h"];
   let numbers = [1, 2, 3, 4, 5, 6, 7, 8];
