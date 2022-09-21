@@ -78,9 +78,39 @@ function Chessboard() {
     }
   }
 
+  let activePiece = null;
+  const handleMouseDown = (e) => {
+    if (!e.target.classList.value) {
+      let x = e.clientX - 35;
+      let y = e.clientY;
+      e.target.style.position = "absolute";
+      e.target.style.left = `${x}px`;
+      e.target.style.top = `${y}px`;
+      activePiece = e.target;
+    }
+  };
+  const handleMouseMove = (e) => {
+    if (activePiece) {
+      let x = e.clientX - 35;
+      let y = e.clientY;
+      e.target.style.position = "absolute";
+      e.target.style.left = `${x}px`;
+      e.target.style.top = `${y}px`;
+    }
+  };
+
+  const handleMouseDrop = (e) => {
+    if (activePiece) activePiece = null;
+  };
+
   return (
     <div id="chess-page">
-      <div id="chessboard-container">
+      <div
+        id="chessboard-container"
+        onMouseDown={(e) => handleMouseDown(e)}
+        onMouseMove={(e) => handleMouseMove(e)}
+        onMouseUp={handleMouseDrop}
+      >
         <div>
           {numbers.reverse().map((num) => (
             <span key={uuidv4()} className="numbers">
