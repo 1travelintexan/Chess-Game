@@ -1,6 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Libre+Baskerville:ital@1&family=Monoton&display=swap");
 body {
   margin: 0;
   padding: 0;
+  background-color: rgb(0, 82, 189);
+  font-family: "Cinzel", serif;
 }
 #App {
   display: flex;
@@ -17,7 +20,7 @@ body {
   align-items: flex-end;
 }
 #chessboard {
-  background-color: green;
+  background-color: rgb(117, 111, 111);
   display: flex;
   flex-wrap: wrap;
   width: 800px;
@@ -25,18 +28,25 @@ body {
   border: 2px solid black;
   box-shadow: 5px 5px 50px rgb(156, 156, 156);
 }
+
 .tile {
   height: 100px;
   width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
 .white {
-  background-color: aliceblue;
+  background-color: rgb(98, 208, 255);
+  box-shadow: 0px 0px 20px rgb(98, 208, 255);
 }
 
 #letters-row {
   display: flex;
   width: 804px;
 }
+
 .letters {
   display: flex;
   justify-content: center;
@@ -44,6 +54,7 @@ body {
   width: 100px;
   font-size: 2rem;
 }
+
 .numbers {
   display: flex;
   justify-content: center;
@@ -52,4 +63,8 @@ body {
   height: 100px;
   width: 50px;
   font-size: 2rem;
+}
+
+.piece {
+  height: 80px;
 }
