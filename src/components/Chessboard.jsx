@@ -1,7 +1,6 @@
 import { v4 as uuidv4 } from "uuid";
 import * as Chess from "chess.js";
 import { BehaviorSubject } from "rxjs";
-import { useDrop } from "react-dnd";
 import ChessTile from "./ChessTile";
 import whitePawn from "../images/pawn_w.png";
 import whiteRook from "../images/rook_w.png";
@@ -139,19 +138,20 @@ function Chessboard() {
     }
     console.log("postion", position);
     return position;
-    // const newArr = piecesArr.map((e) => {
-    //   if (piece.place[0] === e.x && +piece.place[1] === e.y) {
-    //     e.x = "d";
-    //     e.y = 3;
-    //     console.log("newE ", e);
-    //   }
-    //   return e;
-    // });
-    // setPieces(newArr);
   };
 
-  const movePiece = (from, to) => {
-    console.log(from, to);
+  const handleMovePiece = (from, to) => {
+    console.log("from and to", from, to);
+    const newArr = pieces.map((e) => {
+      if (to[0] && to[1] && from[0] === e.x && +from[1] === e.y) {
+        e.x = to[0];
+        e.y = Number(to[1]);
+        return e;
+      } else {
+        return e;
+      }
+    });
+    setPieces([...newArr]);
   };
 
   return (
@@ -187,6 +187,7 @@ function Chessboard() {
                       getPosition={getPosition}
                       piece={e}
                       position={e.place}
+                      movePiece={handleMovePiece}
                     />
                   </div>
                 );
@@ -199,6 +200,7 @@ function Chessboard() {
                       piece={e}
                       getPosition={getPosition}
                       position={e.place}
+                      movePiece={handleMovePiece}
                     />
                   </div>
                 );

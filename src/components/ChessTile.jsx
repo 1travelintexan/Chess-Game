@@ -1,7 +1,6 @@
 import { useDrag, DragPreviewImage, useDrop } from "react-dnd";
-import { v4 as uuidv4 } from "uuid";
 
-function ChessTile({ white, piece, getPosition, image, position }) {
+function ChessTile({ white, getPosition, image, position, movePiece }) {
   const [{ isDragging }, drag, preview] = useDrag({
     type: "piece",
     item: { type: "piece", id: `${position}_${image}` },
@@ -13,21 +12,16 @@ function ChessTile({ white, piece, getPosition, image, position }) {
   const [, drop] = useDrop({
     accept: "piece",
     drop: (item) => {
-      let position = getPosition();
-      console.log("here is the item", item, "position", position);
+      let fromPosition = item.id.split("_")[0];
+      let toPosition = getPosition();
+      movePiece(fromPosition, toPosition);
     },
   });
 
   return white ? (
     <>
       <DragPreviewImage connect={preview} src={image} />
-      <div
-        className="tile white"
-        ref={drop}
-        // onClick={(e) => {
-        //   getPosition(e);
-        // }}
-      >
+      <div className="tile white" ref={drop}>
         {image && (
           <img
             src={image}
@@ -42,13 +36,7 @@ function ChessTile({ white, piece, getPosition, image, position }) {
   ) : (
     <>
       <DragPreviewImage connect={preview} src={image} />
-      <div
-        className="tile"
-        ref={drop}
-        // onClick={(e) => {
-        //   getPosition(e);
-        // }}
-      >
+      <div className="tile" ref={drop}>
         {image && (
           <img
             src={image}
