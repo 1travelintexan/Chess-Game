@@ -24,6 +24,19 @@ body {
 #logo {
   font-size: 3rem;
   color: rgb(98, 208, 255);
+  /* animation: grow 1.2s infinite linear; */
+}
+
+@keyframes grow {
+  0% {
+    transform: scale(1);
+  }
+  90% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 #App {
@@ -34,7 +47,7 @@ body {
 }
 #chess-page {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   flex-direction: column;
 }
 #chessboard-container {
@@ -95,6 +108,6 @@ body {
   font-size: 2rem;
 }
 
-.piece {
+.chess-piece {
   height: 80px;
 }

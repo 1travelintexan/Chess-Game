@@ -1,4 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
+import * as Chess from "chess.js";
+import { BehaviorSubject } from "rxjs";
+import { useDrop } from "react-dnd";
 import ChessTile from "./ChessTile";
 import whitePawn from "../images/pawn_w.png";
 import whiteRook from "../images/rook_w.png";
@@ -12,10 +15,10 @@ import blackBishop from "../images/bishop_b.png";
 import blackknight from "../images/knight_b.png";
 import blackQueen from "../images/queen_b.png";
 import blackKing from "../images/king_b.png";
+import { useEffect, useState } from "react";
 
 function Chessboard() {
-  let chessboard = [];
-  let pieces = [
+  let piecesArr = [
     //white pawns
     { image: whitePawn, x: "a", y: 2 },
     { image: whitePawn, x: "b", y: 2 },
@@ -61,56 +64,99 @@ function Chessboard() {
     //black king
     { image: blackKing, x: "e", y: 8 },
   ];
-  let letters = ["a", "b", "c", "d", "e", "f", "g", "h"];
-  let numbers = [1, 2, 3, 4, 5, 6, 7, 8];
+  const [chessboard, setChessboard] = useState([]);
+  const [pieces, setPieces] = useState(piecesArr);
 
-  for (let j = 8; j >= 1; j--) {
-    for (let i = 0; i < letters.length; i++) {
-      //set image to undefined and if the coordinates are the same, then update value. Then push to chessboard array with image value
-      let image = undefined;
-      pieces.forEach((piece) => {
-        if (piece.x === letters[i] && piece.y === j) {
-          image = piece.image;
+  const numbers = [1, 2, 3, 4, 5, 6, 7, 8];
+  const boardLetters = ["a", "b", "c", "d", "e", "f", "g", "h"];
+
+  useEffect(() => {
+    let arr = [];
+    let letters = ["a", "b", "c", "d", "e", "f", "g", "h"];
+    const createChessboard = () => {
+      for (let j = 8; j >= 1; j--) {
+        for (let i = 0; i < letters.length; i++) {
+          //set image to undefined and if the coordinates are the same, then update value. Then push to chessboard array with image value
+          let image = undefined;
+          pieces.forEach((piece) => {
+            if (piece.x === letters[i] && piece.y === j) {
+              image = piece.image;
+            }
+          });
+
+          arr.push({ place: `${letters[i]}${j}`, image });
         }
-      });
-      //push object with coordinates and image properties to map over later
-      chessboard.push({ place: `${letters[i]}${j}`, image });
-    }
-  }
+      }
+    };
+    createChessboard();
+    setChessboard(arr);
+  }, [pieces]);
 
-  let activePiece = null;
-  const handleMouseDown = (e) => {
-    if (!e.target.classList.value) {
-      let x = e.clientX - 35;
-      let y = e.clientY;
-      e.target.style.position = "absolute";
-      e.target.style.left = `${x}px`;
-      e.target.style.top = `${y}px`;
-      activePiece = e.target;
+  const getPosition = (e) => {
+    let boardStartX = window.innerWidth / 2 - 400;
+    let boardStartY = window.innerHeight / 2 - 400;
+
+    const mouseX = window.event.clientX - 25;
+    const mouseY = window.event.clientY + 20;
+    let position = "";
+
+    // set letters of position based on the cursor position
+    if (mouseX > boardStartX + 10 && mouseX < boardStartX + 80) {
+      position += "a";
+    } else if (mouseX > boardStartX + 100 && mouseX < boardStartX + 180) {
+      position += "b";
+    } else if (mouseX > boardStartX + 210 && mouseX < boardStartX + 280) {
+      position += "c";
+    } else if (mouseX > boardStartX + 310 && mouseX < boardStartX + 380) {
+      position += "d";
+    } else if (mouseX > boardStartX + 410 && mouseX < boardStartX + 480) {
+      position += "e";
+    } else if (mouseX > boardStartX + 510 && mouseX < boardStartX + 580) {
+      position += "f";
+    } else if (mouseX > boardStartX + 610 && mouseX < boardStartX + 680) {
+      position += "g";
+    } else if (mouseX > boardStartX + 710 && mouseX < boardStartX + 780) {
+      position += "h";
     }
-  };
-  const handleMouseMove = (e) => {
-    if (activePiece) {
-      let x = e.clientX - 35;
-      let y = e.clientY;
-      e.target.style.position = "absolute";
-      e.target.style.left = `${x}px`;
-      e.target.style.top = `${y}px`;
+
+    //set the numbers of the position based on the cursor position
+    if (mouseY > boardStartY + 20 && mouseY < boardStartY + 80) {
+      position += "8";
+    } else if (mouseY > boardStartY + 130 && mouseY < boardStartY + 180) {
+      position += "7";
+    } else if (mouseY > boardStartY + 230 && mouseY < boardStartY + 280) {
+      position += "6";
+    } else if (mouseY > boardStartY + 330 && mouseY < boardStartY + 380) {
+      position += "5";
+    } else if (mouseY > boardStartY + 430 && mouseY < boardStartY + 480) {
+      position += "4";
+    } else if (mouseY > boardStartY + 530 && mouseY < boardStartY + 580) {
+      position += "3";
+    } else if (mouseY > boardStartY + 630 && mouseY < boardStartY + 680) {
+      position += "2";
+    } else if (mouseY > boardStartY + 730 && mouseY < boardStartY + 780) {
+      position += "1";
     }
+    console.log("postion", position);
+    return position;
+    // const newArr = piecesArr.map((e) => {
+    //   if (piece.place[0] === e.x && +piece.place[1] === e.y) {
+    //     e.x = "d";
+    //     e.y = 3;
+    //     console.log("newE ", e);
+    //   }
+    //   return e;
+    // });
+    // setPieces(newArr);
   };
 
-  const handleMouseDrop = (e) => {
-    if (activePiece) activePiece = null;
+  const movePiece = (from, to) => {
+    console.log(from, to);
   };
 
   return (
     <div id="chess-page">
-      <div
-        id="chessboard-container"
-        onMouseDown={(e) => handleMouseDown(e)}
-        onMouseMove={(e) => handleMouseMove(e)}
-        onMouseUp={handleMouseDrop}
-      >
+      <div id="chessboard-container">
         <div>
           {numbers.reverse().map((num) => (
             <span key={uuidv4()} className="numbers">
@@ -118,25 +164,50 @@ function Chessboard() {
             </span>
           ))}
         </div>
-        <div id="chessboard">
-          {chessboard.map((e, i) => {
-            if (
-              (i % 2 === 0 && e.place[1] % 2 === 0) ||
-              (i % 2 !== 0 && e.place[1] % 2 !== 0)
-            ) {
-              //white tiles with piece image added
-              return (
-                <ChessTile key={uuidv4()} white={"white"} piece={e.image} />
-              );
-            } else {
-              //black tiles with piece image added
-              return <ChessTile key={uuidv4()} piece={e.image} />;
-            }
-          })}
+        <div
+          id="chessboard"
+          onClick={(e) => {
+            getPosition(e);
+          }}
+        >
+          {chessboard &&
+            chessboard.map((e, i) => {
+              // console.log("map", e);
+              //checks if its a white or black square and what piece is on that square
+              if (
+                (i % 2 === 0 && e.place[1] % 2 === 0) ||
+                (i % 2 !== 0 && e.place[1] % 2 !== 0)
+              ) {
+                //white tiles with piece image added
+                return (
+                  <div key={uuidv4()}>
+                    <ChessTile
+                      white={"white"}
+                      image={e.image}
+                      getPosition={getPosition}
+                      piece={e}
+                      position={e.place}
+                    />
+                  </div>
+                );
+              } else {
+                //black tiles with piece image added
+                return (
+                  <div key={uuidv4()}>
+                    <ChessTile
+                      image={e.image}
+                      piece={e}
+                      getPosition={getPosition}
+                      position={e.place}
+                    />
+                  </div>
+                );
+              }
+            })}
         </div>
       </div>
       <div id="letters-row">
-        {letters.map((e) => (
+        {boardLetters.map((e) => (
           <span key={uuidv4()} className="letters">
             {e}
           </span>
