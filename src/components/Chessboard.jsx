@@ -19,49 +19,161 @@ import { useEffect, useState } from "react";
 function Chessboard() {
   let piecesArr = [
     //white pawns
-    { image: whitePawn, x: "a", y: 2 },
-    { image: whitePawn, x: "b", y: 2 },
-    { image: whitePawn, x: "c", y: 2 },
-    { image: whitePawn, x: "d", y: 2 },
-    { image: whitePawn, x: "e", y: 2 },
-    { image: whitePawn, x: "f", y: 2 },
-    { image: whitePawn, x: "g", y: 2 },
-    { image: whitePawn, x: "h", y: 2 },
+    {
+      image: whitePawn,
+      type: "pawn",
+      color: "white",
+      x: "a",
+      y: 2,
+      firstMove: true,
+    },
+    {
+      image: whitePawn,
+      type: "pawn",
+      color: "white",
+      x: "b",
+      y: 2,
+      firstMove: true,
+    },
+    {
+      image: whitePawn,
+      type: "pawn",
+      color: "white",
+      x: "c",
+      y: 2,
+      firstMove: true,
+    },
+    {
+      image: whitePawn,
+      type: "pawn",
+      color: "white",
+      x: "d",
+      y: 2,
+      firstMove: true,
+    },
+    {
+      image: whitePawn,
+      type: "pawn",
+      color: "white",
+      x: "e",
+      y: 2,
+      firstMove: true,
+    },
+    {
+      image: whitePawn,
+      type: "pawn",
+      color: "white",
+      x: "f",
+      y: 2,
+      firstMove: true,
+    },
+    {
+      image: whitePawn,
+      type: "pawn",
+      color: "white",
+      x: "g",
+      y: 2,
+      firstMove: true,
+    },
+    {
+      image: whitePawn,
+      type: "pawn",
+      color: "white",
+      x: "h",
+      y: 2,
+      firstMove: true,
+    },
     //white rooks
-    { image: whiteRook, x: "a", y: 1 },
-    { image: whiteRook, x: "h", y: 1 },
+    { image: whiteRook, type: "rook", color: "white", x: "a", y: 1 },
+    { image: whiteRook, type: "rook", color: "white", x: "h", y: 1 },
     //white knights
-    { image: whiteknight, x: "b", y: 1 },
-    { image: whiteknight, x: "g", y: 1 },
+    { image: whiteknight, type: "knight", color: "white", x: "b", y: 1 },
+    { image: whiteknight, type: "knight", color: "white", x: "g", y: 1 },
     //white bishops
-    { image: whiteBishop, x: "c", y: 1 },
-    { image: whiteBishop, x: "f", y: 1 },
+    { image: whiteBishop, type: "bishop", color: "white", x: "c", y: 1 },
+    { image: whiteBishop, type: "bishop", color: "white", x: "f", y: 1 },
     //white Queen
-    { image: whiteQueen, x: "d", y: 1 },
+    { image: whiteQueen, type: "queen", color: "white", x: "d", y: 1 },
     //white king
-    { image: whiteKing, x: "e", y: 1 },
+    { image: whiteKing, type: "king", color: "white", x: "e", y: 1 },
     //black pawns
-    { image: blackPawn, x: "a", y: 7 },
-    { image: blackPawn, x: "b", y: 7 },
-    { image: blackPawn, x: "c", y: 7 },
-    { image: blackPawn, x: "d", y: 7 },
-    { image: blackPawn, x: "e", y: 7 },
-    { image: blackPawn, x: "f", y: 7 },
-    { image: blackPawn, x: "g", y: 7 },
-    { image: blackPawn, x: "h", y: 7 },
+    {
+      image: blackPawn,
+      type: "pawn",
+      color: "black",
+      x: "a",
+      y: 7,
+      firstMove: true,
+    },
+    {
+      image: blackPawn,
+      type: "pawn",
+      color: "black",
+      x: "b",
+      y: 7,
+      firstMove: true,
+    },
+    {
+      image: blackPawn,
+      type: "pawn",
+      color: "black",
+      x: "c",
+      y: 7,
+      firstMove: true,
+    },
+    {
+      image: blackPawn,
+      type: "pawn",
+      color: "black",
+      x: "d",
+      y: 7,
+      firstMove: true,
+    },
+    {
+      image: blackPawn,
+      type: "pawn",
+      color: "black",
+      x: "e",
+      y: 7,
+      firstMove: true,
+    },
+    {
+      image: blackPawn,
+      type: "pawn",
+      color: "black",
+      x: "f",
+      y: 7,
+      firstMove: true,
+    },
+    {
+      image: blackPawn,
+      type: "pawn",
+      color: "black",
+      x: "g",
+      y: 7,
+      firstMove: true,
+    },
+    {
+      image: blackPawn,
+      type: "pawn",
+      color: "black",
+      x: "h",
+      y: 7,
+      firstMove: true,
+    },
     //black rooks
-    { image: blackRook, x: "a", y: 8 },
-    { image: blackRook, x: "h", y: 8 },
+    { image: blackRook, type: "rook", color: "black", x: "a", y: 8 },
+    { image: blackRook, type: "rook", color: "black", x: "h", y: 8 },
     //black knights
-    { image: blackknight, x: "b", y: 8 },
-    { image: blackknight, x: "g", y: 8 },
+    { image: blackknight, type: "knight", color: "black", x: "b", y: 8 },
+    { image: blackknight, type: "knight", color: "black", x: "g", y: 8 },
     //white bishops
-    { image: blackBishop, x: "c", y: 8 },
-    { image: blackBishop, x: "f", y: 8 },
+    { image: blackBishop, type: "bishop", color: "black", x: "c", y: 8 },
+    { image: blackBishop, type: "bishop", color: "black", x: "f", y: 8 },
     //white Queen
-    { image: blackQueen, x: "d", y: 8 },
+    { image: blackQueen, type: "queen", color: "black", x: "d", y: 8 },
     //black king
-    { image: blackKing, x: "e", y: 8 },
+    { image: blackKing, type: "king", color: "black", x: "e", y: 8 },
   ];
   const [chessboard, setChessboard] = useState([]);
   const [pieces, setPieces] = useState(piecesArr);
@@ -76,14 +188,18 @@ function Chessboard() {
       for (let j = 8; j >= 1; j--) {
         for (let i = 0; i < letters.length; i++) {
           //set image to undefined and if the coordinates are the same, then update value. Then push to chessboard array with image value
-          let image = undefined;
+          let image;
+          let color;
+          let type;
           pieces.forEach((piece) => {
             if (piece.x === letters[i] && piece.y === j) {
               image = piece.image;
+              color = piece.color;
+              type = piece.type;
             }
           });
 
-          arr.push({ place: `${letters[i]}${j}`, image });
+          arr.push({ place: `${letters[i]}${j}`, image, color, type });
         }
       }
     };
@@ -136,22 +252,118 @@ function Chessboard() {
     } else if (mouseY > boardStartY + 730 && mouseY < boardStartY + 780) {
       position += "1";
     }
-    console.log("postion", position);
     return position;
   };
 
-  const handleMovePiece = (from, to) => {
-    console.log("from and to", from, to);
-    const newArr = pieces.map((e) => {
-      if (to[0] && to[1] && from[0] === e.x && +from[1] === e.y) {
-        e.x = to[0];
-        e.y = Number(to[1]);
-        return e;
-      } else {
-        return e;
-      }
-    });
-    setPieces([...newArr]);
+  const handleMovePiece = (from, to, movingPieceColor, pieceType) => {
+    let positionInformation = handleCheckPosition(to);
+
+    //if a piece is on the 'to' square, then filter it from the pieces list and replace the image for that square
+    if (
+      positionInformation &&
+      movingPieceColor === positionInformation["color"]
+    ) {
+      //   let filteredPieces = pieces.filter((piece) => {
+      //     let pieceLocation = `${piece.x}${piece.y}`;
+      //     if (pieceLocation !== to) {
+      //       return piece;
+      //     } else {
+      //       return null;
+      //     }
+      //   });
+      //   //now that the pieces are filtered with one less piece that was eaten, we map over them to change the x and y of the correct piece
+      //   filteredPieces.map((piece) => {
+      //     let pieceLocation = `${piece.x}${piece.y}`;
+      //     if (pieceLocation === from) {
+      //       piece.x = to[0];
+      //       piece.y = +to[1];
+      //     }
+      //     return piece;
+      //   });
+      //   setPieces([...filteredPieces]);
+    } else {
+      const piecesWithNewLocation = pieces.map((e) => {
+        //check if from and to are truthy and then if the location matches any pieces
+        if (to[0] && to[1] && from[0] === e.x && +from[1] === e.y) {
+          e.x = to[0];
+          e.y = Number(to[1]);
+          return e;
+        } else {
+          return e;
+        }
+      });
+      setPieces([...piecesWithNewLocation]);
+    }
+  };
+
+  const handleCheckPosition = (position) => {
+    console.log("chessboard", chessboard, "position", position);
+    let positionInformation = chessboard.filter(
+      (square) => square.place === position
+    );
+    return positionInformation[0];
+  };
+  //checks if the piece is allowed to move from the old position to the new position
+  const handleValidMove = (fromPosition, toPosition, pieceType, pieceColor) => {
+    switch (pieceType) {
+      case "pawn":
+        //find the pawns information in the state
+        let filteredPawn = pieces.filter(
+          (piece) => piece.x === fromPosition[0] && piece.y === +fromPosition[1]
+        );
+        let isFirstMove = filteredPawn[0].firstMove;
+        console.log(fromPosition, toPosition);
+        //checks if the pawn is on its first move and if its white
+        if (isFirstMove && pieceColor === "white") {
+          // if it is first and white then checks the y axis if it was one square up or two squares
+          if (
+            (toPosition[1] - fromPosition[1] === 2 &&
+              fromPosition[0] === toPosition[0]) ||
+            (toPosition[1] - fromPosition[1] === 1 &&
+              fromPosition[0] === toPosition[0])
+          ) {
+            //change the first move to false
+            let updatedPawn = (filteredPawn[0].firstMove = false);
+            //create a new array with the updated pawn to false
+            let upDatedPieces = pieces.map((piece) => {
+              if (piece.x === fromPosition[0] && piece.y === fromPosition[1]) {
+                piece = updatedPawn;
+              }
+              return piece;
+            });
+            setPieces([...upDatedPieces]);
+            return true;
+          }
+        } else if (!isFirstMove && pieceColor === "white") {
+          //checks if the white piece is only moving one square forward bc its not the first move
+          if (
+            toPosition[1] - fromPosition[1] === 1 &&
+            fromPosition[0] === toPosition[0]
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        }
+        break;
+      case "bishop":
+        console.log("bishop");
+        break;
+      case "knight":
+        console.log("knight");
+        break;
+      case "rook":
+        console.log("rook");
+        break;
+      case "queen":
+        console.log("queen");
+        break;
+      case "king":
+        console.log("king");
+        break;
+      default:
+        return false;
+    }
   };
 
   return (
@@ -172,7 +384,6 @@ function Chessboard() {
         >
           {chessboard &&
             chessboard.map((e, i) => {
-              // console.log("map", e);
               //checks if its a white or black square and what piece is on that square
               if (
                 (i % 2 === 0 && e.place[1] % 2 === 0) ||
@@ -185,9 +396,11 @@ function Chessboard() {
                       white={"white"}
                       image={e.image}
                       getPosition={getPosition}
-                      piece={e}
+                      color={e.color}
                       position={e.place}
+                      pieceType={e.type}
                       movePiece={handleMovePiece}
+                      validMove={handleValidMove}
                     />
                   </div>
                 );
@@ -197,10 +410,12 @@ function Chessboard() {
                   <div key={uuidv4()}>
                     <ChessTile
                       image={e.image}
-                      piece={e}
+                      color={e.color}
                       getPosition={getPosition}
                       position={e.place}
+                      pieceType={e.type}
                       movePiece={handleMovePiece}
+                      validMove={handleValidMove}
                     />
                   </div>
                 );

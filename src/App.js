@@ -3,10 +3,12 @@ import Logo from "./components/Logo";
 
 function App() {
   return (
-    <div id="App">
-      {/* <Logo /> */}
-      <Chessboard />
-    </div>
+    <>
+      <Logo />
+      <div id="App">
+        <Chessboard />
+      </div>
+    </>
   );
 }
 

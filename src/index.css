@@ -12,37 +12,39 @@ body {
 }
 
 #logo-container {
-  height: 80vh;
+  position: absolute;
+  top: 10px;
+  left: 10px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  flex-direction: column;
 }
 #logo-image {
-  height: 20vh;
+  height: 10vh;
 }
 #logo {
-  font-size: 3rem;
+  font-size: 1.5rem;
   color: rgb(98, 208, 255);
-  /* animation: grow 1.2s infinite linear; */
+  animation: grow 1s infinite linear;
 }
 
 @keyframes grow {
   0% {
     transform: scale(1);
   }
-  90% {
+  80% {
     transform: scale(1.1);
   }
   100% {
-    transform: scale(1);
+    transform: scale(0.9);
   }
 }
 
 #App {
   width: 100vw;
+  height: 100vh;
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   align-items: center;
 }
 #chess-page {
