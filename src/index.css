@@ -87,6 +87,11 @@ body {
   box-shadow: 0px 0px 20px rgb(98, 208, 255);
 }
 
+.possible-move {
+  background: rgba(3, 255, 49, 0.537);
+  box-shadow: 0px -10px 20px rgba(3, 255, 49);
+}
+
 #letters-row {
   display: flex;
   width: 804px;

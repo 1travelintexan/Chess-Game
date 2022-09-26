@@ -1,6 +1,7 @@
 import { useDrag, DragPreviewImage, useDrop } from "react-dnd";
 
 function ChessTile({
+  possibleMoveClass,
   white,
   getPosition,
   image,
@@ -9,6 +10,7 @@ function ChessTile({
   color,
   pieceType,
   validMove,
+  possibleMoves,
 }) {
   const [{ isDragging }, drag, preview] = useDrag({
     type: "piece",
@@ -35,11 +37,17 @@ function ChessTile({
   return white ? (
     <>
       <DragPreviewImage connect={preview} src={image} />
-      <div className="tile white" ref={drop}>
+      <div
+        className={`tile white ${possibleMoveClass}`}
+        ref={drop}
+        onClick={(e) => {
+          possibleMoves(e, position, pieceType, color);
+        }}
+      >
         {image && (
           <img
             src={image}
-            alt={`${color}_piece`}
+            alt={`${color}_${pieceType}`}
             className="chess-piece"
             style={{ opacity: isDragging ? 0 : 1 }}
             ref={drag}
@@ -50,7 +58,13 @@ function ChessTile({
   ) : (
     <>
       <DragPreviewImage connect={preview} src={image} />
-      <div className="tile" ref={drop}>
+      <div
+        className={`tile ${possibleMoveClass}`}
+        ref={drop}
+        onClick={(e) => {
+          possibleMoves(e, position, pieceType, color);
+        }}
+      >
         {image && (
           <img
             src={image}

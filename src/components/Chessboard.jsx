@@ -1,6 +1,4 @@
 import { v4 as uuidv4 } from "uuid";
-import * as Chess from "chess.js";
-import { BehaviorSubject } from "rxjs";
 import ChessTile from "./ChessTile";
 import whitePawn from "../images/pawn_w.png";
 import whiteRook from "../images/rook_w.png";
@@ -191,15 +189,23 @@ function Chessboard() {
           let image;
           let color;
           let type;
+          let isFirstMove;
           pieces.forEach((piece) => {
             if (piece.x === letters[i] && piece.y === j) {
               image = piece.image;
               color = piece.color;
               type = piece.type;
+              isFirstMove = piece.firstMove;
             }
           });
 
-          arr.push({ place: `${letters[i]}${j}`, image, color, type });
+          arr.push({
+            place: `${letters[i]}${j}`,
+            image,
+            color,
+            type,
+            isFirstMove,
+          });
         }
       }
     };
@@ -303,6 +309,72 @@ function Chessboard() {
     );
     return positionInformation[0];
   };
+
+  //checks what are teh possible moves and adds a class to those possible squares
+  const handlePossibleMoves = (event, position, pieceType, pieceColor) => {
+    let chessboardCopy = [...chessboard];
+    //erase all classes of possible moves
+    chessboardCopy.map((e) => (e.possibleMoveClass = null));
+    setChessboard(chessboardCopy);
+    let clickedPiece = chessboard.filter((square) => square.place === position);
+    // clickedPiece[0].possibleMoveClass = "possible-move";
+    const findIndexOfObject = (arr, coordinate) => {
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].place === coordinate) {
+          return i;
+        }
+      }
+      return -1;
+    };
+    console.log(clickedPiece[0]);
+    switch (clickedPiece[0].type) {
+      case "pawn":
+        //<============white pawn possible moves =================>
+        if (clickedPiece[0].color === "white") {
+          if (clickedPiece[0].isFirstMove) {
+            let column = clickedPiece[0].place[0];
+            let number = +clickedPiece[0].place[1];
+            let possibleSquares = [
+              `${column}${number + 1}`,
+              `${column}${number + 2}`,
+            ];
+            chessboardCopy = [...chessboard];
+            let filteredSquares = chessboardCopy
+              .filter((e) => {
+                if (
+                  e.place === possibleSquares[0] ||
+                  e.place === possibleSquares[1]
+                ) {
+                  return e;
+                } else {
+                  return null;
+                }
+              })
+              .map((e) => {
+                e.possibleMoveClass = "possible-move";
+                return e;
+              });
+            let index1 = findIndexOfObject(
+              chessboard,
+              filteredSquares[0].place
+            );
+            let index2 = findIndexOfObject(
+              chessboard,
+              filteredSquares[1].place
+            );
+            chessboardCopy.splice(index1, 1, filteredSquares[0]);
+            chessboardCopy.splice(index2, 1, filteredSquares[1]);
+            setChessboard(chessboardCopy);
+          }
+
+          //   let chessboardCopy = [...chessboard];
+          //   chessboardCopy.splice(index, 1, clickedPiece[0]);
+        }
+        break;
+      default:
+        return null;
+    }
+  };
   //checks if the piece is allowed to move from the old position to the new position
   const handleValidMove = (fromPosition, toPosition, pieceType, pieceColor) => {
     switch (pieceType) {
@@ -312,7 +384,7 @@ function Chessboard() {
           (piece) => piece.x === fromPosition[0] && piece.y === +fromPosition[1]
         );
         let isFirstMove = filteredPawn[0].firstMove;
-        console.log(fromPosition, toPosition);
+        //<=================white pawns==================>
         //checks if the pawn is on its first move and if its white
         if (isFirstMove && pieceColor === "white") {
           // if it is first and white then checks the y axis if it was one square up or two squares
@@ -323,15 +395,16 @@ function Chessboard() {
               fromPosition[0] === toPosition[0])
           ) {
             //change the first move to false
-            let updatedPawn = (filteredPawn[0].firstMove = false);
+            let updatedPawnWhite = (filteredPawn[0].firstMove = false);
             //create a new array with the updated pawn to false
             let upDatedPieces = pieces.map((piece) => {
               if (piece.x === fromPosition[0] && piece.y === fromPosition[1]) {
-                piece = updatedPawn;
+                piece = updatedPawnWhite;
               }
               return piece;
             });
             setPieces([...upDatedPieces]);
+            console.log("valid move");
             return true;
           }
         } else if (!isFirstMove && pieceColor === "white") {
@@ -339,6 +412,40 @@ function Chessboard() {
           if (
             toPosition[1] - fromPosition[1] === 1 &&
             fromPosition[0] === toPosition[0]
+          ) {
+            console.log("valid move");
+            return true;
+          } else {
+            console.log("not a valid move");
+            return false;
+          }
+        }
+        //<=================black pawns==================>
+        else if (isFirstMove && pieceColor === "black") {
+          // if it is first and white then checks the y axis if it was one square up or two squares
+          if (
+            (fromPosition[1] - toPosition[1] === 2 &&
+              toPosition[0] === fromPosition[0]) ||
+            (fromPosition[1] - toPosition[1] === 1 &&
+              toPosition[0] === fromPosition[0])
+          ) {
+            //change the first move to false
+            let updatedPawnBlack = (filteredPawn[0].firstMove = false);
+            //create a new array with the updated pawn to false
+            let upDatedPieces = pieces.map((piece) => {
+              if (piece.x === fromPosition[0] && piece.y === fromPosition[1]) {
+                piece = updatedPawnBlack;
+              }
+              return piece;
+            });
+            setPieces([...upDatedPieces]);
+            return true;
+          }
+        } else if (!isFirstMove && pieceColor === "black") {
+          //checks if the white piece is only moving one square forward bc its not the first move
+          if (
+            fromPosition[1] - toPosition[1] === 1 &&
+            toPosition[0] === fromPosition[0]
           ) {
             return true;
           } else {
@@ -393,6 +500,7 @@ function Chessboard() {
                 return (
                   <div key={uuidv4()}>
                     <ChessTile
+                      possibleMoveClass={e.possibleMoveClass}
                       white={"white"}
                       image={e.image}
                       getPosition={getPosition}
@@ -401,6 +509,7 @@ function Chessboard() {
                       pieceType={e.type}
                       movePiece={handleMovePiece}
                       validMove={handleValidMove}
+                      possibleMoves={handlePossibleMoves}
                     />
                   </div>
                 );
@@ -409,6 +518,7 @@ function Chessboard() {
                 return (
                   <div key={uuidv4()}>
                     <ChessTile
+                      possibleMoveClass={e.possibleMoveClass}
                       image={e.image}
                       color={e.color}
                       getPosition={getPosition}
@@ -416,6 +526,7 @@ function Chessboard() {
                       pieceType={e.type}
                       movePiece={handleMovePiece}
                       validMove={handleValidMove}
+                      possibleMoves={handlePossibleMoves}
                     />
                   </div>
                 );
