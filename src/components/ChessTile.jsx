@@ -38,12 +38,13 @@ function ChessTile({
     <>
       <DragPreviewImage connect={preview} src={image} />
       <div
-        className={`tile white ${possibleMoveClass}`}
+        className={`tile white`}
         ref={drop}
         onClick={(e) => {
           possibleMoves(e, position, pieceType, color);
         }}
       >
+        <div className={`${possibleMoveClass}`}></div>
         {image && (
           <img
             src={image}
@@ -59,12 +60,13 @@ function ChessTile({
     <>
       <DragPreviewImage connect={preview} src={image} />
       <div
-        className={`tile ${possibleMoveClass}`}
+        className={`tile`}
         ref={drop}
         onClick={(e) => {
           possibleMoves(e, position, pieceType, color);
         }}
       >
+        <div className={`${possibleMoveClass}`}></div>
         {image && (
           <img
             src={image}

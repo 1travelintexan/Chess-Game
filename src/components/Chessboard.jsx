@@ -88,8 +88,22 @@ function Chessboard() {
     { image: whiteknight, type: "knight", color: "white", x: "b", y: 1 },
     { image: whiteknight, type: "knight", color: "white", x: "g", y: 1 },
     //white bishops
-    { image: whiteBishop, type: "bishop", color: "white", x: "c", y: 1 },
-    { image: whiteBishop, type: "bishop", color: "white", x: "f", y: 1 },
+    {
+      image: whiteBishop,
+      type: "bishop",
+      color: "white",
+      x: "c",
+      y: 1,
+      darkSquare: true,
+    },
+    {
+      image: whiteBishop,
+      type: "bishop",
+      color: "white",
+      x: "f",
+      y: 1,
+      darkSquare: false,
+    },
     //white Queen
     { image: whiteQueen, type: "queen", color: "white", x: "d", y: 1 },
     //white king
@@ -166,8 +180,22 @@ function Chessboard() {
     { image: blackknight, type: "knight", color: "black", x: "b", y: 8 },
     { image: blackknight, type: "knight", color: "black", x: "g", y: 8 },
     //white bishops
-    { image: blackBishop, type: "bishop", color: "black", x: "c", y: 8 },
-    { image: blackBishop, type: "bishop", color: "black", x: "f", y: 8 },
+    {
+      image: blackBishop,
+      type: "bishop",
+      color: "black",
+      x: "c",
+      y: 8,
+      darkSquare: true,
+    },
+    {
+      image: blackBishop,
+      type: "bishop",
+      color: "black",
+      x: "f",
+      y: 8,
+      darkSquare: false,
+    },
     //white Queen
     { image: blackQueen, type: "queen", color: "black", x: "d", y: 8 },
     //black king
@@ -190,12 +218,14 @@ function Chessboard() {
           let color;
           let type;
           let isFirstMove;
+          let darkSquare;
           pieces.forEach((piece) => {
             if (piece.x === letters[i] && piece.y === j) {
               image = piece.image;
               color = piece.color;
               type = piece.type;
               isFirstMove = piece.firstMove;
+              darkSquare = piece.darkSquare;
             }
           });
 
@@ -205,6 +235,8 @@ function Chessboard() {
             color,
             type,
             isFirstMove,
+            possibleMoveClass: "",
+            darkSquare,
           });
         }
       }
@@ -303,21 +335,25 @@ function Chessboard() {
   };
 
   const handleCheckPosition = (position) => {
-    console.log("chessboard", chessboard, "position", position);
     let positionInformation = chessboard.filter(
       (square) => square.place === position
     );
     return positionInformation[0];
   };
 
-  //checks what are teh possible moves and adds a class to those possible squares
+  //checks what are the possible moves and adds a class to those possible squares
   const handlePossibleMoves = (event, position, pieceType, pieceColor) => {
     let chessboardCopy = [...chessboard];
+
     //erase all classes of possible moves
-    chessboardCopy.map((e) => (e.possibleMoveClass = null));
+    chessboardCopy.map((e) => (e.possibleMoveClass = ""));
     setChessboard(chessboardCopy);
-    let clickedPiece = chessboard.filter((square) => square.place === position);
-    // clickedPiece[0].possibleMoveClass = "possible-move";
+
+    let clickedPieceArr = chessboard.filter(
+      (square) => square.place === position
+    );
+    let clickedPiece = clickedPieceArr[0];
+    // clickedPiece.possibleMoveClass = "possible-move";
     const findIndexOfObject = (arr, coordinate) => {
       for (let i = 0; i < arr.length; i++) {
         if (arr[i].place === coordinate) {
@@ -326,14 +362,13 @@ function Chessboard() {
       }
       return -1;
     };
-    console.log(clickedPiece[0]);
-    switch (clickedPiece[0].type) {
+    switch (clickedPiece.type) {
       case "pawn":
         //<============white pawn possible moves =================>
-        if (clickedPiece[0].color === "white") {
-          if (clickedPiece[0].isFirstMove) {
-            let column = clickedPiece[0].place[0];
-            let number = +clickedPiece[0].place[1];
+        if (clickedPiece.color === "white") {
+          if (clickedPiece.isFirstMove) {
+            let column = clickedPiece.place[0];
+            let number = +clickedPiece.place[1];
             let possibleSquares = [
               `${column}${number + 1}`,
               `${column}${number + 2}`,
@@ -365,16 +400,210 @@ function Chessboard() {
             chessboardCopy.splice(index1, 1, filteredSquares[0]);
             chessboardCopy.splice(index2, 1, filteredSquares[1]);
             setChessboard(chessboardCopy);
+          } else {
+            let column = clickedPiece.place[0];
+            let number = +clickedPiece.place[1];
+            let possibleSquares = [`${column}${number + 1}`];
+            chessboardCopy = [...chessboard];
+            let filteredSquares = chessboardCopy
+              .filter((e) => {
+                if (e.place === possibleSquares[0]) {
+                  return e;
+                } else {
+                  return null;
+                }
+              })
+              .map((e) => {
+                e.possibleMoveClass = "possible-move";
+                return e;
+              });
+            let index1 = findIndexOfObject(
+              chessboard,
+              filteredSquares[0].place
+            );
+            chessboardCopy.splice(index1, 1, filteredSquares[0]);
+            setChessboard(chessboardCopy);
           }
-
-          //   let chessboardCopy = [...chessboard];
-          //   chessboardCopy.splice(index, 1, clickedPiece[0]);
+        } else {
+          //<===========black pawns=======>
+          if (clickedPiece.isFirstMove) {
+            let column = clickedPiece.place[0];
+            let number = +clickedPiece.place[1];
+            let possibleSquares = [
+              `${column}${number - 1}`,
+              `${column}${number - 2}`,
+            ];
+            chessboardCopy = [...chessboard];
+            let filteredSquares = chessboardCopy
+              .filter((e) => {
+                if (
+                  e.place === possibleSquares[0] ||
+                  e.place === possibleSquares[1]
+                ) {
+                  return e;
+                } else {
+                  return null;
+                }
+              })
+              .map((e) => {
+                e.possibleMoveClass = "possible-move";
+                return e;
+              });
+            let index1 = findIndexOfObject(
+              chessboard,
+              filteredSquares[0].place
+            );
+            let index2 = findIndexOfObject(
+              chessboard,
+              filteredSquares[1].place
+            );
+            chessboardCopy.splice(index1, 1, filteredSquares[0]);
+            chessboardCopy.splice(index2, 1, filteredSquares[1]);
+            setChessboard(chessboardCopy);
+          } else {
+            let column = clickedPiece.place[0];
+            let number = +clickedPiece.place[1];
+            let possibleSquares = [`${column}${number - 1}`];
+            chessboardCopy = [...chessboard];
+            let filteredSquares = chessboardCopy
+              .filter((e) => {
+                if (e.place === possibleSquares[0]) {
+                  return e;
+                } else {
+                  return null;
+                }
+              })
+              .map((e) => {
+                e.possibleMoveClass = "possible-move";
+                return e;
+              });
+            let index1 = findIndexOfObject(
+              chessboard,
+              filteredSquares[0].place
+            );
+            chessboardCopy.splice(index1, 1, filteredSquares[0]);
+            setChessboard(chessboardCopy);
+          }
         }
+        break;
+      case "bishop":
+        //<=====white bishop moves==========>
+        const pieceInWay = (position, pieceType) => {
+          if (pieceType === "bishop") {
+            let chessboardCopy = [...chessboard];
+            let allSquares = [];
+            let availableSquares = [];
+            let letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
+            let number = JSON.parse(JSON.stringify(Number(position[1])));
+            let letter = String.fromCharCode(letterNum);
+
+            let filterSquares = (arr, position) => {
+              return arr.filter((e) => e.place === position);
+            };
+            //<=========up and right available squares with bishop==============>
+            while (number <= 8) {
+              letter = String.fromCharCode(letterNum);
+              let changingPosition = `${letter}${number}`;
+              let square = filterSquares(chessboardCopy, changingPosition);
+              number++;
+              letterNum++;
+              allSquares.push(square[0]);
+            }
+            for (let i = 1; i < allSquares.length; i++) {
+              if (allSquares[i] && allSquares[i].image === undefined) {
+                availableSquares.push(allSquares[i]);
+              } else {
+                console.log("finished");
+                break;
+              }
+            }
+
+            //<=========up and left available squares with bishop==============>
+            //reset the variables to the starting piece position
+            letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
+            number = JSON.parse(JSON.stringify(Number(position[1])));
+            allSquares = [];
+            while (number <= 8 && letterNum >= 97) {
+              letter = String.fromCharCode(letterNum);
+              let changingPosition = `${letter}${number}`;
+              let square = filterSquares(chessboardCopy, changingPosition);
+              number++;
+              letterNum--;
+              allSquares.push(square[0]);
+            }
+            for (let i = 1; i < allSquares.length; i++) {
+              if (allSquares[i] && allSquares[i].image === undefined) {
+                availableSquares.push(allSquares[i]);
+              } else {
+                console.log("finished");
+                break;
+              }
+            }
+
+            //<=========down and left available squares with bishop==============>
+            //reset the variables to the starting piece position
+            letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
+            number = JSON.parse(JSON.stringify(Number(position[1])));
+            allSquares = [];
+
+            while (number > 0 && letterNum >= 97) {
+              letter = String.fromCharCode(letterNum);
+              let changingPosition = `${letter}${number}`;
+              let square = filterSquares(chessboardCopy, changingPosition);
+              number--;
+              letterNum--;
+              allSquares.push(square[0]);
+            }
+            for (let i = 1; i < allSquares.length; i++) {
+              if (allSquares[i] && allSquares[i].image === undefined) {
+                availableSquares.push(allSquares[i]);
+              } else {
+                console.log("finished");
+                break;
+              }
+            }
+
+            //<=========down and right available squares with bishop==============>
+            //reset the variables to the starting piece position
+            letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
+            number = JSON.parse(JSON.stringify(Number(position[1])));
+            allSquares = [];
+            while (number > 0 && letterNum <= 104) {
+              letter = String.fromCharCode(letterNum);
+              let changingPosition = `${letter}${number}`;
+              let square = filterSquares(chessboardCopy, changingPosition);
+              number--;
+              letterNum++;
+              allSquares.push(square[0]);
+            }
+            for (let i = 1; i < allSquares.length; i++) {
+              if (allSquares[i] && allSquares[i].image === undefined) {
+                availableSquares.push(allSquares[i]);
+              } else {
+                console.log("finished");
+                break;
+              }
+            }
+            // console.log("available squares 4", availableSquares);
+            chessboardCopy.map((square) => {
+              availableSquares.forEach((availableSquare) => {
+                if (square.place === availableSquare.place) {
+                  square.possibleMoveClass = "possible-move";
+                }
+              });
+              return square;
+            });
+          }
+        };
+
+        pieceInWay(clickedPiece.place, clickedPiece.type);
+
         break;
       default:
         return null;
     }
   };
+
   //checks if the piece is allowed to move from the old position to the new position
   const handleValidMove = (fromPosition, toPosition, pieceType, pieceColor) => {
     switch (pieceType) {
@@ -455,7 +684,7 @@ function Chessboard() {
         break;
       case "bishop":
         console.log("bishop");
-        break;
+        return true;
       case "knight":
         console.log("knight");
         break;
@@ -469,7 +698,7 @@ function Chessboard() {
         console.log("king");
         break;
       default:
-        return false;
+        return true;
     }
   };
 
