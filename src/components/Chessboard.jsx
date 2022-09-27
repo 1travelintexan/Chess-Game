@@ -245,6 +245,267 @@ function Chessboard() {
     setChessboard(arr);
   }, [pieces]);
 
+  const filterSquares = (arr, position) => {
+    return arr.filter((e) => e.place === position);
+  };
+  const setClassForAvailableSquares = (position, pieceType) => {
+    //<============all bishop possible moves=========>
+    if (pieceType === "bishop") {
+      let chessboardCopy = [...chessboard];
+      let allSquares = [];
+      let availableSquares = [];
+      let letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
+      let number = JSON.parse(JSON.stringify(Number(position[1])));
+      let letter = String.fromCharCode(letterNum);
+
+      //<=========up and right available squares with bishop==============>
+      while (number <= 8) {
+        letter = String.fromCharCode(letterNum);
+        let changingPosition = `${letter}${number}`;
+        let square = filterSquares(chessboardCopy, changingPosition);
+        number++;
+        letterNum++;
+        allSquares.push(square[0]);
+      }
+      for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i] && allSquares[i].image === undefined) {
+          availableSquares.push(allSquares[i]);
+        } else {
+          console.log("finished");
+          break;
+        }
+      }
+
+      //<=========up and left available squares with bishop==============>
+      //reset the variables to the starting piece position
+      letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
+      number = JSON.parse(JSON.stringify(Number(position[1])));
+      allSquares = [];
+      while (number <= 8 && letterNum >= 97) {
+        letter = String.fromCharCode(letterNum);
+        let changingPosition = `${letter}${number}`;
+        let square = filterSquares(chessboardCopy, changingPosition);
+        number++;
+        letterNum--;
+        allSquares.push(square[0]);
+      }
+      for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i] && allSquares[i].image === undefined) {
+          availableSquares.push(allSquares[i]);
+        } else {
+          console.log("finished");
+          break;
+        }
+      }
+
+      //<=========down and left available squares with bishop==============>
+      //reset the variables to the starting piece position
+      letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
+      number = JSON.parse(JSON.stringify(Number(position[1])));
+      allSquares = [];
+
+      while (number > 0 && letterNum >= 97) {
+        letter = String.fromCharCode(letterNum);
+        let changingPosition = `${letter}${number}`;
+        let square = filterSquares(chessboardCopy, changingPosition);
+        number--;
+        letterNum--;
+        allSquares.push(square[0]);
+      }
+      for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i] && allSquares[i].image === undefined) {
+          availableSquares.push(allSquares[i]);
+        } else {
+          console.log("finished");
+          break;
+        }
+      }
+
+      //<=========down and right available squares with bishop==============>
+      //reset the variables to the starting piece position
+      letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
+      number = JSON.parse(JSON.stringify(Number(position[1])));
+      allSquares = [];
+      while (number > 0 && letterNum <= 104) {
+        letter = String.fromCharCode(letterNum);
+        let changingPosition = `${letter}${number}`;
+        let square = filterSquares(chessboardCopy, changingPosition);
+        number--;
+        letterNum++;
+        allSquares.push(square[0]);
+      }
+      for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i] && allSquares[i].image === undefined) {
+          availableSquares.push(allSquares[i]);
+        } else {
+          console.log("finished");
+          break;
+        }
+      }
+      chessboardCopy.map((square) => {
+        availableSquares.forEach((availableSquare) => {
+          if (square.place === availableSquare.place) {
+            square.possibleMoveClass = "possible-move";
+          }
+        });
+        return square;
+      });
+    }
+    //<============all knight possible moves=========>
+    if (pieceType === "knight") {
+      let chessboardCopy = [...chessboard];
+      let allSquares = [];
+      let letter1;
+      let letter2;
+      //<=========available squares with knight==============>
+      for (let i = 1; i <= 8; i++) {
+        let letterNum1 = JSON.parse(JSON.stringify(position.charCodeAt(0)));
+        let letterNum2 = JSON.parse(JSON.stringify(position.charCodeAt(0)));
+        let number = JSON.parse(JSON.stringify(Number(position[1])));
+        //handles moving the knight up or down 2 (i is up and down)
+        if (i === number + 2 || i === number - 2) {
+          letterNum1 = letterNum1 - 1;
+          letterNum2 = letterNum2 + 1;
+          letter1 = String.fromCharCode(letterNum1);
+          letter2 = String.fromCharCode(letterNum2);
+          let newSquare1 = `${letter1}${i}`;
+          let newSquare2 = `${letter2}${i}`;
+          allSquares.push(newSquare1, newSquare2);
+        }
+        //handles moving the knight up and down one
+        else if (i === number + 1 || i === number - 1) {
+          letterNum1 = letterNum1 - 2;
+          letterNum2 = letterNum2 + 2;
+          letter1 = String.fromCharCode(letterNum1);
+          letter2 = String.fromCharCode(letterNum2);
+          let newSquare1 = `${letter1}${i}`;
+          let newSquare2 = `${letter2}${i}`;
+          allSquares.push(newSquare1, newSquare2);
+        }
+      }
+      chessboardCopy.map((square) => {
+        allSquares.forEach((position) => {
+          if (square.place === position && square.image === undefined) {
+            square.possibleMoveClass = "possible-move";
+          }
+        });
+        return square;
+      });
+    }
+    //<============all rook possible moves=========>
+    if (pieceType === "rook") {
+      let chessboardCopy = [...chessboard];
+      let allSquares = [];
+      let availableSquares = [];
+      let letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
+      let number = JSON.parse(JSON.stringify(Number(position[1])));
+      let letter = String.fromCharCode(letterNum);
+
+      let filterSquares = (arr, position) => {
+        return arr.filter((e) => e.place === position);
+      };
+
+      //<=========up available squares with rook==============>
+      while (number <= 8) {
+        letter = String.fromCharCode(letterNum);
+        let changingPosition = `${letter}${number}`;
+        let square = filterSquares(chessboardCopy, changingPosition);
+        number++;
+        allSquares.push(square[0]);
+      }
+      for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i] && allSquares[i].image === undefined) {
+          availableSquares.push(allSquares[i]);
+        } else {
+          console.log("finished");
+          break;
+        }
+      }
+      //<=========down available squares with rook==============>
+      //reset the variables to the starting piece position
+      letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
+      number = JSON.parse(JSON.stringify(Number(position[1])));
+      allSquares = [];
+      while (number > 0) {
+        letter = String.fromCharCode(letterNum);
+        let changingPosition = `${letter}${number}`;
+        let square = filterSquares(chessboardCopy, changingPosition);
+        number--;
+        allSquares.push(square[0]);
+      }
+      for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i] && allSquares[i].image === undefined) {
+          availableSquares.push(allSquares[i]);
+        } else {
+          console.log("finished");
+          break;
+        }
+      }
+      //<=========right available squares with rook==============>
+      //reset the variables to the starting piece position
+      letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
+      number = JSON.parse(JSON.stringify(Number(position[1])));
+      allSquares = [];
+      while (letterNum <= 104) {
+        letter = String.fromCharCode(letterNum);
+        let changingPosition = `${letter}${number}`;
+        let square = filterSquares(chessboardCopy, changingPosition);
+        letterNum++;
+        allSquares.push(square[0]);
+      }
+      for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i] && allSquares[i].image === undefined) {
+          availableSquares.push(allSquares[i]);
+        } else {
+          console.log("finished");
+          break;
+        }
+      }
+      //<=========left available squares with rook==============>
+      //reset the variables to the starting piece position
+      letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
+      number = JSON.parse(JSON.stringify(Number(position[1])));
+      allSquares = [];
+      while (letterNum >= 97) {
+        letter = String.fromCharCode(letterNum);
+        let changingPosition = `${letter}${number}`;
+        let square = filterSquares(chessboardCopy, changingPosition);
+        letterNum--;
+        allSquares.push(square[0]);
+      }
+      for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i] && allSquares[i].image === undefined) {
+          availableSquares.push(allSquares[i]);
+        } else {
+          console.log("finished");
+          break;
+        }
+      }
+      chessboardCopy.map((square) => {
+        availableSquares.forEach((availableSquare) => {
+          if (square.place === availableSquare.place) {
+            square.possibleMoveClass = "possible-move";
+          }
+        });
+        return square;
+      });
+    }
+    //<============all rook possible moves=========>
+
+    if (pieceType === "queen") {
+      console.log("queen");
+    }
+  };
+
+  const findIndexOfObject = (arr, coordinate) => {
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].place === coordinate) {
+        return i;
+      }
+    }
+    return -1;
+  };
+
   const getPosition = (e) => {
     let boardStartX = window.innerWidth / 2 - 400;
     let boardStartY = window.innerHeight / 2 - 400;
@@ -353,15 +614,6 @@ function Chessboard() {
       (square) => square.place === position
     );
     let clickedPiece = clickedPieceArr[0];
-    // clickedPiece.possibleMoveClass = "possible-move";
-    const findIndexOfObject = (arr, coordinate) => {
-      for (let i = 0; i < arr.length; i++) {
-        if (arr[i].place === coordinate) {
-          return i;
-        }
-      }
-      return -1;
-    };
     switch (clickedPiece.type) {
       case "pawn":
         //<============white pawn possible moves =================>
@@ -487,120 +739,19 @@ function Chessboard() {
         }
         break;
       case "bishop":
-        //<=====white bishop moves==========>
-        const pieceInWay = (position, pieceType) => {
-          if (pieceType === "bishop") {
-            let chessboardCopy = [...chessboard];
-            let allSquares = [];
-            let availableSquares = [];
-            let letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
-            let number = JSON.parse(JSON.stringify(Number(position[1])));
-            let letter = String.fromCharCode(letterNum);
-
-            let filterSquares = (arr, position) => {
-              return arr.filter((e) => e.place === position);
-            };
-            //<=========up and right available squares with bishop==============>
-            while (number <= 8) {
-              letter = String.fromCharCode(letterNum);
-              let changingPosition = `${letter}${number}`;
-              let square = filterSquares(chessboardCopy, changingPosition);
-              number++;
-              letterNum++;
-              allSquares.push(square[0]);
-            }
-            for (let i = 1; i < allSquares.length; i++) {
-              if (allSquares[i] && allSquares[i].image === undefined) {
-                availableSquares.push(allSquares[i]);
-              } else {
-                console.log("finished");
-                break;
-              }
-            }
-
-            //<=========up and left available squares with bishop==============>
-            //reset the variables to the starting piece position
-            letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
-            number = JSON.parse(JSON.stringify(Number(position[1])));
-            allSquares = [];
-            while (number <= 8 && letterNum >= 97) {
-              letter = String.fromCharCode(letterNum);
-              let changingPosition = `${letter}${number}`;
-              let square = filterSquares(chessboardCopy, changingPosition);
-              number++;
-              letterNum--;
-              allSquares.push(square[0]);
-            }
-            for (let i = 1; i < allSquares.length; i++) {
-              if (allSquares[i] && allSquares[i].image === undefined) {
-                availableSquares.push(allSquares[i]);
-              } else {
-                console.log("finished");
-                break;
-              }
-            }
-
-            //<=========down and left available squares with bishop==============>
-            //reset the variables to the starting piece position
-            letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
-            number = JSON.parse(JSON.stringify(Number(position[1])));
-            allSquares = [];
-
-            while (number > 0 && letterNum >= 97) {
-              letter = String.fromCharCode(letterNum);
-              let changingPosition = `${letter}${number}`;
-              let square = filterSquares(chessboardCopy, changingPosition);
-              number--;
-              letterNum--;
-              allSquares.push(square[0]);
-            }
-            for (let i = 1; i < allSquares.length; i++) {
-              if (allSquares[i] && allSquares[i].image === undefined) {
-                availableSquares.push(allSquares[i]);
-              } else {
-                console.log("finished");
-                break;
-              }
-            }
-
-            //<=========down and right available squares with bishop==============>
-            //reset the variables to the starting piece position
-            letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
-            number = JSON.parse(JSON.stringify(Number(position[1])));
-            allSquares = [];
-            while (number > 0 && letterNum <= 104) {
-              letter = String.fromCharCode(letterNum);
-              let changingPosition = `${letter}${number}`;
-              let square = filterSquares(chessboardCopy, changingPosition);
-              number--;
-              letterNum++;
-              allSquares.push(square[0]);
-            }
-            for (let i = 1; i < allSquares.length; i++) {
-              if (allSquares[i] && allSquares[i].image === undefined) {
-                availableSquares.push(allSquares[i]);
-              } else {
-                console.log("finished");
-                break;
-              }
-            }
-            // console.log("available squares 4", availableSquares);
-            chessboardCopy.map((square) => {
-              availableSquares.forEach((availableSquare) => {
-                if (square.place === availableSquare.place) {
-                  square.possibleMoveClass = "possible-move";
-                }
-              });
-              return square;
-            });
-          }
-        };
-
-        pieceInWay(clickedPiece.place, clickedPiece.type);
-
+        setClassForAvailableSquares(clickedPiece.place, clickedPiece.type);
+        break;
+      case "knight":
+        setClassForAvailableSquares(clickedPiece.place, clickedPiece.type);
+        break;
+      case "rook":
+        setClassForAvailableSquares(clickedPiece.place, clickedPiece.type);
+        break;
+      case "queen":
+        setClassForAvailableSquares(clickedPiece.place, clickedPiece.type);
         break;
       default:
-        return null;
+        return;
     }
   };
 
@@ -683,20 +834,15 @@ function Chessboard() {
         }
         break;
       case "bishop":
-        console.log("bishop");
         return true;
       case "knight":
-        console.log("knight");
-        break;
+        return true;
       case "rook":
-        console.log("rook");
-        break;
+        return true;
       case "queen":
-        console.log("queen");
-        break;
+        return true;
       case "king":
-        console.log("king");
-        break;
+        return true;
       default:
         return true;
     }
