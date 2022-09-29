@@ -82,8 +82,22 @@ function Chessboard() {
       firstMove: true,
     },
     //white rooks
-    { image: whiteRook, type: "rook", color: "white", x: "a", y: 1 },
-    { image: whiteRook, type: "rook", color: "white", x: "h", y: 1 },
+    {
+      image: whiteRook,
+      type: "rook",
+      color: "white",
+      x: "a",
+      y: 1,
+      firstMove: true,
+    },
+    {
+      image: whiteRook,
+      type: "rook",
+      color: "white",
+      x: "h",
+      y: 1,
+      firstMove: true,
+    },
     //white knights
     { image: whiteknight, type: "knight", color: "white", x: "b", y: 1 },
     { image: whiteknight, type: "knight", color: "white", x: "g", y: 1 },
@@ -107,7 +121,14 @@ function Chessboard() {
     //white Queen
     { image: whiteQueen, type: "queen", color: "white", x: "d", y: 1 },
     //white king
-    { image: whiteKing, type: "king", color: "white", x: "e", y: 1 },
+    {
+      image: whiteKing,
+      type: "king",
+      color: "white",
+      x: "e",
+      y: 1,
+      firstMove: true,
+    },
     //black pawns
     {
       image: blackPawn,
@@ -174,8 +195,22 @@ function Chessboard() {
       firstMove: true,
     },
     //black rooks
-    { image: blackRook, type: "rook", color: "black", x: "a", y: 8 },
-    { image: blackRook, type: "rook", color: "black", x: "h", y: 8 },
+    {
+      image: blackRook,
+      type: "rook",
+      color: "black",
+      x: "a",
+      y: 8,
+      firstMove: true,
+    },
+    {
+      image: blackRook,
+      type: "rook",
+      color: "black",
+      x: "h",
+      y: 8,
+      firstMove: true,
+    },
     //black knights
     { image: blackknight, type: "knight", color: "black", x: "b", y: 8 },
     { image: blackknight, type: "knight", color: "black", x: "g", y: 8 },
@@ -199,7 +234,14 @@ function Chessboard() {
     //white Queen
     { image: blackQueen, type: "queen", color: "black", x: "d", y: 8 },
     //black king
-    { image: blackKing, type: "king", color: "black", x: "e", y: 8 },
+    {
+      image: blackKing,
+      type: "king",
+      color: "black",
+      x: "e",
+      y: 8,
+      firstMove: true,
+    },
   ];
   const [chessboard, setChessboard] = useState([]);
   const [pieces, setPieces] = useState(piecesArr);
@@ -490,10 +532,270 @@ function Chessboard() {
         return square;
       });
     }
-    //<============all rook possible moves=========>
-
+    //<============all queen possible moves=========>
     if (pieceType === "queen") {
-      console.log("queen");
+      let chessboardCopy = [...chessboard];
+      let allSquares = [];
+      let availableSquares = [];
+      let letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
+      let number = JSON.parse(JSON.stringify(Number(position[1])));
+      let letter = String.fromCharCode(letterNum);
+
+      //<=========up and right available squares with queen==============>
+      while (number <= 8) {
+        letter = String.fromCharCode(letterNum);
+        let changingPosition = `${letter}${number}`;
+        let square = filterSquares(chessboardCopy, changingPosition);
+        number++;
+        letterNum++;
+        allSquares.push(square[0]);
+      }
+      for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i] && allSquares[i].image === undefined) {
+          availableSquares.push(allSquares[i]);
+        } else {
+          console.log("finished");
+          break;
+        }
+      }
+
+      //<=========up and left available squares with queen==============>
+      //reset the variables to the starting piece position
+      letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
+      number = JSON.parse(JSON.stringify(Number(position[1])));
+      allSquares = [];
+      while (number <= 8 && letterNum >= 97) {
+        letter = String.fromCharCode(letterNum);
+        let changingPosition = `${letter}${number}`;
+        let square = filterSquares(chessboardCopy, changingPosition);
+        number++;
+        letterNum--;
+        allSquares.push(square[0]);
+      }
+      for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i] && allSquares[i].image === undefined) {
+          availableSquares.push(allSquares[i]);
+        } else {
+          console.log("finished");
+          break;
+        }
+      }
+
+      //<=========down and left available squares with queen (diagonal)==============>
+      //reset the variables to the starting piece position
+      letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
+      number = JSON.parse(JSON.stringify(Number(position[1])));
+      allSquares = [];
+
+      while (number > 0 && letterNum >= 97) {
+        letter = String.fromCharCode(letterNum);
+        let changingPosition = `${letter}${number}`;
+        let square = filterSquares(chessboardCopy, changingPosition);
+        number--;
+        letterNum--;
+        allSquares.push(square[0]);
+      }
+      for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i] && allSquares[i].image === undefined) {
+          availableSquares.push(allSquares[i]);
+        } else {
+          console.log("finished");
+          break;
+        }
+      }
+
+      //<=========down and right available squares with queen (diagonal)==============>
+      //reset the variables to the starting piece position
+      letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
+      number = JSON.parse(JSON.stringify(Number(position[1])));
+      allSquares = [];
+      while (number > 0 && letterNum <= 104) {
+        letter = String.fromCharCode(letterNum);
+        let changingPosition = `${letter}${number}`;
+        let square = filterSquares(chessboardCopy, changingPosition);
+        number--;
+        letterNum++;
+        allSquares.push(square[0]);
+      }
+      for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i] && allSquares[i].image === undefined) {
+          availableSquares.push(allSquares[i]);
+        } else {
+          console.log("finished");
+          break;
+        }
+      }
+
+      //<=========up available squares with queen==============>
+      //reset the variables to the starting piece position
+      letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
+      number = JSON.parse(JSON.stringify(Number(position[1])));
+      allSquares = [];
+      while (number <= 8) {
+        letter = String.fromCharCode(letterNum);
+        let changingPosition = `${letter}${number}`;
+        let square = filterSquares(chessboardCopy, changingPosition);
+        number++;
+        allSquares.push(square[0]);
+      }
+      for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i] && allSquares[i].image === undefined) {
+          availableSquares.push(allSquares[i]);
+        } else {
+          console.log("finished");
+          break;
+        }
+      }
+      //<=========down available squares with queen==============>
+      //reset the variables to the starting piece position
+      letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
+      number = JSON.parse(JSON.stringify(Number(position[1])));
+      allSquares = [];
+      while (number > 0) {
+        letter = String.fromCharCode(letterNum);
+        let changingPosition = `${letter}${number}`;
+        let square = filterSquares(chessboardCopy, changingPosition);
+        number--;
+        allSquares.push(square[0]);
+      }
+      for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i] && allSquares[i].image === undefined) {
+          availableSquares.push(allSquares[i]);
+        } else {
+          console.log("finished");
+          break;
+        }
+      }
+      //<=========down available squares with queen==============>
+      //reset the variables to the starting piece position
+      letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
+      number = JSON.parse(JSON.stringify(Number(position[1])));
+      allSquares = [];
+      while (number > 0) {
+        letter = String.fromCharCode(letterNum);
+        let changingPosition = `${letter}${number}`;
+        let square = filterSquares(chessboardCopy, changingPosition);
+        number--;
+        allSquares.push(square[0]);
+      }
+      for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i] && allSquares[i].image === undefined) {
+          availableSquares.push(allSquares[i]);
+        } else {
+          console.log("finished");
+          break;
+        }
+      }
+      //<=========right available squares with queen==============>
+      //reset the variables to the starting piece position
+      letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
+      number = JSON.parse(JSON.stringify(Number(position[1])));
+      allSquares = [];
+      while (letterNum <= 104) {
+        letter = String.fromCharCode(letterNum);
+        let changingPosition = `${letter}${number}`;
+        let square = filterSquares(chessboardCopy, changingPosition);
+        letterNum++;
+        allSquares.push(square[0]);
+      }
+      for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i] && allSquares[i].image === undefined) {
+          availableSquares.push(allSquares[i]);
+        } else {
+          console.log("finished");
+          break;
+        }
+      }
+      //<=========left available squares with queen==============>
+      //reset the variables to the starting piece position
+      letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
+      number = JSON.parse(JSON.stringify(Number(position[1])));
+      allSquares = [];
+      while (letterNum >= 97) {
+        letter = String.fromCharCode(letterNum);
+        let changingPosition = `${letter}${number}`;
+        let square = filterSquares(chessboardCopy, changingPosition);
+        letterNum--;
+        allSquares.push(square[0]);
+      }
+      for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i] && allSquares[i].image === undefined) {
+          availableSquares.push(allSquares[i]);
+        } else {
+          console.log("finished");
+          break;
+        }
+      }
+
+      chessboardCopy.map((square) => {
+        availableSquares.forEach((availableSquare) => {
+          if (square.place === availableSquare.place) {
+            square.possibleMoveClass = "possible-move";
+          }
+        });
+        return square;
+      });
+    }
+    //<===========all possible king moves==============>
+    if (pieceType === "king") {
+      let chessboardCopy = [...chessboard];
+      let allSquares = [];
+      let availableSquares = [];
+      let number = JSON.parse(JSON.stringify(Number(position[1])));
+
+      //<==============create a variable for every position around the king=============>
+      const frontLeft = `${String.fromCharCode(position.charCodeAt(0) - 1)}${
+        number + 1
+      }`;
+      const frontMiddle = `${String.fromCharCode(position.charCodeAt(0))}${
+        number + 1
+      }`;
+      const frontRight = `${String.fromCharCode(position.charCodeAt(0) + 1)}${
+        number + 1
+      }`;
+      const left = `${String.fromCharCode(
+        position.charCodeAt(0) - 1
+      )}${number}`;
+      const right = `${String.fromCharCode(
+        position.charCodeAt(0) + 1
+      )}${number}`;
+      const backLeft = `${String.fromCharCode(position.charCodeAt(0) - 1)}${
+        number - 1
+      }`;
+      const backMiddle = `${String.fromCharCode(position.charCodeAt(0))}${
+        number - 1
+      }`;
+      const backRight = `${String.fromCharCode(position.charCodeAt(0) + 1)}${
+        number - 1
+      }`;
+
+      //push into the allSquares array
+      allSquares.push(
+        frontLeft,
+        frontMiddle,
+        frontRight,
+        left,
+        right,
+        backLeft,
+        backMiddle,
+        backRight
+      );
+      //<==========filter out all of the squares that have a piece already on them ==============>
+      let filteredSquares = allSquares.filter((e) => !e.includes("0"));
+      for (let i = 0; i < filteredSquares.length; i++) {
+        let square = filterSquares(chessboardCopy, allSquares[i]);
+        if (square && square[0].image === undefined) {
+          availableSquares.push(square[0]);
+        }
+      }
+      chessboardCopy.map((square) => {
+        availableSquares.forEach((availableSquare) => {
+          if (square.place === availableSquare.place) {
+            square.possibleMoveClass = "possible-move";
+          }
+        });
+        return square;
+      });
     }
   };
 
@@ -556,9 +858,151 @@ function Chessboard() {
 
   const handleMovePiece = (from, to, movingPieceColor, pieceType) => {
     let positionInformation = handleCheckPosition(to);
-
+    //white king short castle
+    if (pieceType === "king" && movingPieceColor === "white" && to === "g1") {
+      let whiteKing = pieces.filter(
+        (e) => e.type === "king" && e.color === "white"
+      );
+      let rookH1 = pieces.filter(
+        (e) => e.type === "rook" && e.x === "h" && e.y === 1
+      );
+      let g1SquareIsEmpty = pieces.filter((e) => {
+        return e.x === to[0] && e.y === Number(to[1]);
+      });
+      if (
+        g1SquareIsEmpty.length === 0 &&
+        whiteKing[0].firstMove &&
+        rookH1[0].firstMove
+      ) {
+        //map over pieces and update the x and y of the white king and rook
+        let newPieces = pieces.map((e) => {
+          let piecePlace = `${e.x}${e.y}`;
+          if (piecePlace === "e1") {
+            e.x = "g";
+            e.y = 1;
+            e.firstMove = false;
+          } else if (piecePlace === "h1") {
+            e.x = "f";
+            e.y = 1;
+            e.firstMove = false;
+          }
+          return e;
+        });
+        setPieces(newPieces);
+      }
+    }
+    //white king long  castle
+    else if (
+      pieceType === "king" &&
+      movingPieceColor === "white" &&
+      to === "c1"
+    ) {
+      let whiteKing = pieces.filter(
+        (e) => e.type === "king" && e.color === "white"
+      );
+      let rookA8 = pieces.filter(
+        (e) => e.type === "rook" && e.x === "a" && e.y === 1
+      );
+      let c1SquareIsEmpty = pieces.filter((e) => {
+        return e.x === to[0] && e.y === Number(to[1]);
+      });
+      if (
+        c1SquareIsEmpty.length === 0 &&
+        whiteKing[0].firstMove &&
+        rookA8[0].firstMove
+      ) {
+        //map over pieces and update the x and y of the white king and rook
+        let newPieces = pieces.map((e) => {
+          let piecePlace = `${e.x}${e.y}`;
+          if (piecePlace === "e1") {
+            e.x = "c";
+            e.y = 1;
+            e.firstMove = false;
+          } else if (piecePlace === "a1") {
+            e.x = "d";
+            e.y = 1;
+            e.firstMove = false;
+          }
+          return e;
+        });
+        setPieces(newPieces);
+      }
+    } else if (
+      //black king short castle
+      pieceType === "king" &&
+      movingPieceColor === "black" &&
+      to === "g8"
+    ) {
+      let blackKing = pieces.filter(
+        (e) => e.type === "king" && e.color === "black"
+      );
+      let rookH8 = pieces.filter(
+        (e) => e.type === "rook" && e.x === "h" && e.y === 8
+      );
+      let g1SquareIsEmpty = pieces.filter((e) => {
+        return e.x === to[0] && e.y === Number(to[1]);
+      });
+      if (
+        g1SquareIsEmpty.length === 0 &&
+        blackKing[0].firstMove &&
+        rookH8[0].firstMove
+      ) {
+        //map over pieces and update the x and y of the black king and rook
+        let newPieces = pieces.map((e) => {
+          let piecePlace = `${e.x}${e.y}`;
+          if (piecePlace === "e8") {
+            e.x = "g";
+            e.y = 8;
+            e.firstMove = false;
+          } else if (piecePlace === "h8") {
+            e.x = "f";
+            e.y = 8;
+            e.firstMove = false;
+          }
+          return e;
+        });
+        setPieces(newPieces);
+      }
+    }
+    //black king long  castle
+    else if (
+      pieceType === "king" &&
+      movingPieceColor === "black" &&
+      to === "c8"
+    ) {
+      let blackKing = pieces.filter(
+        (e) => e.type === "king" && e.color === "black"
+      );
+      let rookA8 = pieces.filter(
+        (e) => e.type === "rook" && e.x === "a" && e.y === 8
+      );
+      let c8SquareIsEmpty = pieces.filter((e) => {
+        return e.x === to[0] && e.y === Number(to[1]);
+      });
+      if (
+        c8SquareIsEmpty.length === 0 &&
+        blackKing[0].firstMove &&
+        rookA8[0].firstMove
+      ) {
+        //map over pieces and update the x and y of the black king and rook
+        let newPieces = pieces.map((e) => {
+          let piecePlace = `${e.x}${e.y}`;
+          if (piecePlace === "e8") {
+            e.x = "c";
+            e.y = 8;
+            e.firstMove = false;
+          } else if (piecePlace === "a8") {
+            e.x = "d";
+            e.y = 8;
+            e.firstMove = false;
+          }
+          return e;
+        });
+        setPieces(newPieces);
+      }
+    }
     //if a piece is on the 'to' square, then filter it from the pieces list and replace the image for that square
-    if (
+    else if (
       positionInformation &&
       movingPieceColor === positionInformation["color"]
     ) {
@@ -748,6 +1192,9 @@ function Chessboard() {
         setClassForAvailableSquares(clickedPiece.place, clickedPiece.type);
         break;
       case "queen":
+        setClassForAvailableSquares(clickedPiece.place, clickedPiece.type);
+        break;
+      case "king":
         setClassForAvailableSquares(clickedPiece.place, clickedPiece.type);
         break;
       default:
