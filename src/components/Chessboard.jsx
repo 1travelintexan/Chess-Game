@@ -1017,13 +1017,13 @@ function Chessboard() {
       });
       //eating pieces
       let indexOfEatenPiece = findIndexOfObject(pieces, to);
-      let indexOfAttackingPiece = findIndexOfObject(pieces, from);
       let piecesCopy = [...pieces];
       movingPiece[0].x = to[0];
       movingPiece[0].y = +to[1];
       piecesCopy.splice(indexOfEatenPiece, 1);
-      piecesCopy.splice(indexOfAttackingPiece, 1, movingPiece[0]);
       setPieces(piecesCopy);
+    } else if (positionInformation["color"] === movingPieceColor) {
+      // don't do anything if they are the same color
     } else {
       const piecesWithNewLocation = pieces.map((e) => {
         //check if from and to are truthy and then if the location matches any pieces
@@ -1264,7 +1264,7 @@ function Chessboard() {
           (square) => square.place === toPosition
         );
         let isFirstMove = filteredPawn[0].firstMove;
-        //attacking squares for pawns
+        //attacking squares for white pawns
         let number = +fromPosition[1];
         let columnLeftCharCode = fromPosition.charCodeAt(0) - 1;
         let columnLeftLetter = String.fromCharCode(columnLeftCharCode);
@@ -1286,6 +1286,38 @@ function Chessboard() {
           let upDatedPieces = pieces.map((piece) => {
             if (piece.x === fromPosition[0] && piece.y === fromPosition[1]) {
               piece = updatedPawnWhite;
+            }
+            return piece;
+          });
+          setPieces([...upDatedPieces]);
+          console.log("valid move");
+          return true;
+        }
+        //if there is a white piece where a black pawn can take it, the remove the white piece and set first move to false
+        //attacking squares for white pawns
+        let columnLeftCharCodeBlack = fromPosition.charCodeAt(0) - 1;
+        let columnLeftLetterBlack = String.fromCharCode(
+          columnLeftCharCodeBlack
+        );
+        let columnRightCharCodeBlack = fromPosition.charCodeAt(0) + 1;
+        let columnRightLetterBlack = String.fromCharCode(
+          columnRightCharCodeBlack
+        );
+        let squaresAttackedByPawnBlack = [
+          `${columnLeftLetterBlack}${number - 1}`,
+          `${columnRightLetterBlack}${number - 1}`,
+        ];
+        if (
+          (toPosition === squaresAttackedByPawnBlack[0] ||
+            toPosition === squaresAttackedByPawnBlack[1]) &&
+          toSquare[0].color === "white"
+        ) {
+          let updatedPawnBlack = (filteredPawn[0].firstMove = false);
+          //create a new array with the updated pawn to false
+
+          let upDatedPieces = pieces.map((piece) => {
+            if (piece.x === fromPosition[0] && piece.y === fromPosition[1]) {
+              piece = updatedPawnBlack;
             }
             return piece;
           });
