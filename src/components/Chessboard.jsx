@@ -803,6 +803,8 @@ function Chessboard() {
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].place === coordinate) {
         return i;
+      } else if (arr[i].x === coordinate[0] && arr[i].y === +coordinate[1]) {
+        return i;
       }
     }
     return -1;
@@ -1003,27 +1005,25 @@ function Chessboard() {
     }
     //if a piece is on the 'to' square, then filter it from the pieces list and replace the image for that square
     else if (
-      positionInformation &&
-      movingPieceColor === positionInformation["color"]
+      positionInformation.image &&
+      positionInformation["color"] !== movingPieceColor
     ) {
-      //   let filteredPieces = pieces.filter((piece) => {
-      //     let pieceLocation = `${piece.x}${piece.y}`;
-      //     if (pieceLocation !== to) {
-      //       return piece;
-      //     } else {
-      //       return null;
-      //     }
-      //   });
-      //   //now that the pieces are filtered with one less piece that was eaten, we map over them to change the x and y of the correct piece
-      //   filteredPieces.map((piece) => {
-      //     let pieceLocation = `${piece.x}${piece.y}`;
-      //     if (pieceLocation === from) {
-      //       piece.x = to[0];
-      //       piece.y = +to[1];
-      //     }
-      //     return piece;
-      //   });
-      //   setPieces([...filteredPieces]);
+      let movingPiece = pieces.filter((e) => {
+        if (e.x === from[0] && e.y === +from[1]) {
+          return e;
+        } else {
+          return null;
+        }
+      });
+      //eating pieces
+      let indexOfEatenPiece = findIndexOfObject(pieces, to);
+      let indexOfAttackingPiece = findIndexOfObject(pieces, from);
+      let piecesCopy = [...pieces];
+      movingPiece[0].x = to[0];
+      movingPiece[0].y = +to[1];
+      piecesCopy.splice(indexOfEatenPiece, 1);
+      piecesCopy.splice(indexOfAttackingPiece, 1, movingPiece[0]);
+      setPieces(piecesCopy);
     } else {
       const piecesWithNewLocation = pieces.map((e) => {
         //check if from and to are truthy and then if the location matches any pieces
@@ -1065,6 +1065,7 @@ function Chessboard() {
           if (clickedPiece.isFirstMove) {
             let column = clickedPiece.place[0];
             let number = +clickedPiece.place[1];
+
             let possibleSquares = [
               `${column}${number + 1}`,
               `${column}${number + 2}`,
@@ -1074,7 +1075,9 @@ function Chessboard() {
               .filter((e) => {
                 if (
                   e.place === possibleSquares[0] ||
-                  e.place === possibleSquares[1]
+                  e.place === possibleSquares[1] ||
+                  e.place === possibleSquares[2] ||
+                  e.place === possibleSquares[3]
                 ) {
                   return e;
                 } else {
@@ -1082,7 +1085,13 @@ function Chessboard() {
                 }
               })
               .map((e) => {
-                e.possibleMoveClass = "possible-move";
+                if (e.image !== undefined && e.place === possibleSquares[0]) {
+                  e.possibleMoveClass = "";
+                } else if (e.image === undefined) {
+                  e.possibleMoveClass = "possible-move";
+                } else {
+                  e.possibleMoveClass = "possible-move-with-piece-on-square";
+                }
                 return e;
               });
             let index1 = findIndexOfObject(
@@ -1093,31 +1102,47 @@ function Chessboard() {
               chessboard,
               filteredSquares[1].place
             );
+
             chessboardCopy.splice(index1, 1, filteredSquares[0]);
             chessboardCopy.splice(index2, 1, filteredSquares[1]);
             setChessboard(chessboardCopy);
           } else {
+            //if it is not the white pawns first move
             let column = clickedPiece.place[0];
             let number = +clickedPiece.place[1];
-            let possibleSquares = [`${column}${number + 1}`];
+            let columnLeftCharCode = clickedPiece.place.charCodeAt(0) - 1;
+            let columnLeftLetter = String.fromCharCode(columnLeftCharCode);
+            let columnRightCharCode = clickedPiece.place.charCodeAt(0) + 1;
+            let columnRightLetter = String.fromCharCode(columnRightCharCode);
+
+            let possibleSquares = [
+              `${column}${number + 1}`,
+              `${columnLeftLetter}${number + 1}`,
+              `${columnRightLetter}${number + 1}`,
+            ];
             chessboardCopy = [...chessboard];
-            let filteredSquares = chessboardCopy
+            chessboardCopy
               .filter((e) => {
-                if (e.place === possibleSquares[0]) {
+                if (
+                  e.place === possibleSquares[0] ||
+                  e.place === possibleSquares[1] ||
+                  e.place === possibleSquares[2]
+                ) {
                   return e;
                 } else {
                   return null;
                 }
               })
               .map((e) => {
-                e.possibleMoveClass = "possible-move";
+                if (e.image !== undefined && e.place === possibleSquares[0]) {
+                  e.possibleMoveClass = "";
+                } else if (e.image === undefined) {
+                  e.possibleMoveClass = "possible-move";
+                } else {
+                  e.possibleMoveClass = "possible-move-with-piece-on-square";
+                }
                 return e;
               });
-            let index1 = findIndexOfObject(
-              chessboard,
-              filteredSquares[0].place
-            );
-            chessboardCopy.splice(index1, 1, filteredSquares[0]);
             setChessboard(chessboardCopy);
           }
         } else {
@@ -1142,7 +1167,13 @@ function Chessboard() {
                 }
               })
               .map((e) => {
-                e.possibleMoveClass = "possible-move";
+                if (e.image !== undefined && e.place === possibleSquares[0]) {
+                  e.possibleMoveClass = "";
+                } else if (e.image === undefined) {
+                  e.possibleMoveClass = "possible-move";
+                } else {
+                  e.possibleMoveClass = "possible-move-with-piece-on-square";
+                }
                 return e;
               });
             let index1 = findIndexOfObject(
@@ -1159,18 +1190,37 @@ function Chessboard() {
           } else {
             let column = clickedPiece.place[0];
             let number = +clickedPiece.place[1];
-            let possibleSquares = [`${column}${number - 1}`];
+            let columnLeftCharCode = clickedPiece.place.charCodeAt(0) - 1;
+            let columnLeftLetter = String.fromCharCode(columnLeftCharCode);
+            let columnRightCharCode = clickedPiece.place.charCodeAt(0) + 1;
+            let columnRightLetter = String.fromCharCode(columnRightCharCode);
+
+            let possibleSquares = [
+              `${column}${number - 1}`,
+              `${columnLeftLetter}${number - 1}`,
+              `${columnRightLetter}${number - 1}`,
+            ];
             chessboardCopy = [...chessboard];
             let filteredSquares = chessboardCopy
               .filter((e) => {
-                if (e.place === possibleSquares[0]) {
+                if (
+                  e.place === possibleSquares[0] ||
+                  e.place === possibleSquares[1] ||
+                  e.place === possibleSquares[2]
+                ) {
                   return e;
                 } else {
                   return null;
                 }
               })
               .map((e) => {
-                e.possibleMoveClass = "possible-move";
+                if (e.image !== undefined && e.place === possibleSquares[0]) {
+                  e.possibleMoveClass = "";
+                } else if (e.image === undefined) {
+                  e.possibleMoveClass = "possible-move";
+                } else {
+                  e.possibleMoveClass = "possible-move-with-piece-on-square";
+                }
                 return e;
               });
             let index1 = findIndexOfObject(
@@ -1210,7 +1260,39 @@ function Chessboard() {
         let filteredPawn = pieces.filter(
           (piece) => piece.x === fromPosition[0] && piece.y === +fromPosition[1]
         );
+        let toSquare = chessboard.filter(
+          (square) => square.place === toPosition
+        );
         let isFirstMove = filteredPawn[0].firstMove;
+        //attacking squares for pawns
+        let number = +fromPosition[1];
+        let columnLeftCharCode = fromPosition.charCodeAt(0) - 1;
+        let columnLeftLetter = String.fromCharCode(columnLeftCharCode);
+        let columnRightCharCode = fromPosition.charCodeAt(0) + 1;
+        let columnRightLetter = String.fromCharCode(columnRightCharCode);
+        let squaresAttackedByPawn = [
+          `${columnLeftLetter}${number + 1}`,
+          `${columnRightLetter}${number + 1}`,
+        ];
+        //if there is a black piece where the pawn can attack it, remove the black piece and set isFirstMove to false
+        if (
+          (toPosition === squaresAttackedByPawn[0] ||
+            toPosition === squaresAttackedByPawn[1]) &&
+          toSquare[0].color === "black"
+        ) {
+          let updatedPawnWhite = (filteredPawn[0].firstMove = false);
+          //create a new array with the updated pawn to false
+
+          let upDatedPieces = pieces.map((piece) => {
+            if (piece.x === fromPosition[0] && piece.y === fromPosition[1]) {
+              piece = updatedPawnWhite;
+            }
+            return piece;
+          });
+          setPieces([...upDatedPieces]);
+          console.log("valid move");
+          return true;
+        }
         //<=================white pawns==================>
         //checks if the pawn is on its first move and if its white
         if (isFirstMove && pieceColor === "white") {
