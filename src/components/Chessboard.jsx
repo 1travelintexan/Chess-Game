@@ -488,6 +488,7 @@ function Chessboard() {
       letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
       number = JSON.parse(JSON.stringify(Number(position[1])));
       allSquares = [];
+      //a-h letters, 104 is 'h'
       while (letterNum <= 104) {
         letter = String.fromCharCode(letterNum);
         let changingPosition = `${letter}${number}`;
@@ -810,49 +811,92 @@ function Chessboard() {
     return -1;
   };
 
-  const getPosition = (e) => {
-    let boardStartX = window.innerWidth / 2 - 400;
-    let boardStartY = window.innerHeight / 2 - 400;
-
+  const getPosition = () => {
+    let boardStartX = window.innerWidth / 2 - (window.innerHeight * 0.8) / 2;
+    let boardStartY = (window.innerHeight - window.innerHeight * 0.8) / 2;
+    let squareSize = (window.innerHeight * 0.8) / 8;
+    let boardSize = window.innerHeight * 0.8;
     const mouseX = window.event.clientX - 25;
     const mouseY = window.event.clientY + 20;
     let position = "";
 
     // set letters of position based on the cursor position
-    if (mouseX > boardStartX + 10 && mouseX < boardStartX + 80) {
+    if (mouseX > boardStartX && mouseX < boardStartX + squareSize) {
       position += "a";
-    } else if (mouseX > boardStartX + 100 && mouseX < boardStartX + 180) {
+    } else if (
+      mouseX > boardStartX + squareSize &&
+      mouseX < boardStartX + squareSize * 2
+    ) {
       position += "b";
-    } else if (mouseX > boardStartX + 210 && mouseX < boardStartX + 280) {
+    } else if (
+      mouseX > boardStartX + squareSize * 2 &&
+      mouseX < boardStartX + squareSize * 3
+    ) {
       position += "c";
-    } else if (mouseX > boardStartX + 310 && mouseX < boardStartX + 380) {
+    } else if (
+      mouseX > boardStartX + squareSize * 3 &&
+      mouseX < boardStartX + squareSize * 4
+    ) {
       position += "d";
-    } else if (mouseX > boardStartX + 410 && mouseX < boardStartX + 480) {
+    } else if (
+      mouseX > boardStartX + squareSize * 4 &&
+      mouseX < boardStartX + squareSize * 5
+    ) {
       position += "e";
-    } else if (mouseX > boardStartX + 510 && mouseX < boardStartX + 580) {
+    } else if (
+      mouseX > boardStartX + squareSize * 5 &&
+      mouseX < boardStartX + squareSize * 6
+    ) {
       position += "f";
-    } else if (mouseX > boardStartX + 610 && mouseX < boardStartX + 680) {
+    } else if (
+      mouseX > boardStartX + squareSize * 6 &&
+      mouseX < boardStartX + squareSize * 7
+    ) {
       position += "g";
-    } else if (mouseX > boardStartX + 710 && mouseX < boardStartX + 780) {
+    } else if (
+      mouseX > boardStartX + squareSize * 7 &&
+      mouseX < boardStartX + squareSize * 8
+    ) {
       position += "h";
     }
 
-    //set the numbers of the position based on the cursor position
-    if (mouseY > boardStartY + 20 && mouseY < boardStartY + 80) {
+    //set the numbers of the position based on the cursor position and the screen size
+    if (mouseY > boardStartY && mouseY < boardStartY + squareSize) {
       position += "8";
-    } else if (mouseY > boardStartY + 130 && mouseY < boardStartY + 180) {
+    } else if (
+      mouseY < boardStartY + boardSize - squareSize * 5 &&
+      mouseY > boardStartY + boardSize - squareSize * 8
+    ) {
       position += "7";
-    } else if (mouseY > boardStartY + 230 && mouseY < boardStartY + 280) {
+    } else if (
+      mouseY < boardStartY + boardSize - squareSize * 5 &&
+      mouseY > boardStartY + boardSize - squareSize * 7
+    ) {
       position += "6";
-    } else if (mouseY > boardStartY + 330 && mouseY < boardStartY + 380) {
+    } else if (
+      mouseY < boardStartY + boardSize - squareSize * 4 &&
+      mouseY > boardStartY + boardSize - squareSize * 6
+    ) {
       position += "5";
-    } else if (mouseY > boardStartY + 430 && mouseY < boardStartY + 480) {
+    } else if (
+      mouseY < boardStartY + boardSize - squareSize * 3 &&
+      mouseY > boardStartY + boardSize - squareSize * 5
+    ) {
       position += "4";
-    } else if (mouseY > boardStartY + 530 && mouseY < boardStartY + 580) {
+    } else if (
+      mouseY < boardStartY + boardSize - squareSize * 2 &&
+      mouseY > boardStartY + boardSize - squareSize * 4
+    ) {
       position += "3";
-    } else if (mouseY > boardStartY + 630 && mouseY < boardStartY + 680) {
+    } else if (
+      mouseY < boardStartY + boardSize - squareSize &&
+      mouseY > boardStartY + boardSize - squareSize * 3
+    ) {
       position += "2";
-    } else if (mouseY > boardStartY + 730 && mouseY < boardStartY + 780) {
+    } else if (
+      mouseY < boardStartY + boardSize &&
+      mouseY > boardStartY + boardSize - squareSize * 2
+    ) {
       position += "1";
     }
     return position;
