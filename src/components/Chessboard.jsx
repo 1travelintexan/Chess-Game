@@ -15,6 +15,7 @@ import blackKing from "../images/king_b.png";
 import { useEffect, useState } from "react";
 
 function Chessboard() {
+  const [whitePieceTurn, setWhitePieceTurn] = useState(true);
   let piecesArr = [
     //white pawns
     {
@@ -864,7 +865,7 @@ function Chessboard() {
     if (mouseY > boardStartY && mouseY < boardStartY + squareSize) {
       position += "8";
     } else if (
-      mouseY < boardStartY + boardSize - squareSize * 5 &&
+      mouseY < boardStartY + boardSize - squareSize * 6 &&
       mouseY > boardStartY + boardSize - squareSize * 8
     ) {
       position += "7";
@@ -1490,6 +1491,8 @@ function Chessboard() {
                       movePiece={handleMovePiece}
                       validMove={handleValidMove}
                       possibleMoves={handlePossibleMoves}
+                      whitePieceTurn={whitePieceTurn}
+                      setWhitePieceTurn={setWhitePieceTurn}
                     />
                   </div>
                 );
@@ -1507,6 +1510,8 @@ function Chessboard() {
                       movePiece={handleMovePiece}
                       validMove={handleValidMove}
                       possibleMoves={handlePossibleMoves}
+                      whitePieceTurn={whitePieceTurn}
+                      setWhitePieceTurn={setWhitePieceTurn}
                     />
                   </div>
                 );

@@ -11,6 +11,8 @@ function ChessTile({
   pieceType,
   validMove,
   possibleMoves,
+  whitePieceTurn,
+  setWhitePieceTurn,
 }) {
   const [{ isDragging }, drag, preview] = useDrag({
     type: "piece",
@@ -28,8 +30,13 @@ function ChessTile({
       let color = item.id.split("_")[2];
       let type = item.id.split("_")[3];
       const isValidMove = validMove(fromPosition, toPosition, type, color);
-      if (isValidMove) {
+      console.log(isValidMove, color, whitePieceTurn);
+      if (isValidMove && color === "white" && whitePieceTurn) {
         movePiece(fromPosition, toPosition, color, type);
+        setWhitePieceTurn(!whitePieceTurn);
+      } else if (isValidMove && color === "black" && !whitePieceTurn) {
+        movePiece(fromPosition, toPosition, color, type);
+        setWhitePieceTurn(!whitePieceTurn);
       }
     },
   });
