@@ -2,9 +2,6 @@
 body {
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background-color: rgb(2, 46, 103);
   font-family: "Cinzel", serif;
   color: azure;
@@ -17,39 +14,68 @@ body {
 
 #logo-container {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 20px;
+  left: 20px;
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 #logo-image {
   height: 10vh;
 }
+
 #logo {
   font-size: 1.5rem;
   color: rgb(98, 208, 255);
   animation: grow 1s infinite linear;
 }
 
-@keyframes grow {
-  0% {
-    transform: scale(1);
-  }
-  80% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(0.9);
-  }
+#timers-container {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 20px;
 }
 
 #App {
+  position: absolute;
+  z-index: 100;
   width: 100vw;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+#black-timer {
+  width: 25%;
+  height: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+#white-timer {
+  width: 25%;
+  height: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+#white {
+  font-size: 4rem;
+  color: rgb(98, 208, 255);
+  text-shadow: 0 0 40px white;
+}
+#black {
+  font-size: 4rem;
+  color: rgb(0, 0, 0);
+  text-shadow: 0 0 40px white;
 }
 #chess-page {
   display: flex;
@@ -135,4 +161,16 @@ body {
 
 .chess-piece {
   height: 80%;
+}
+
+@keyframes grow {
+  0% {
+    transform: scale(1);
+  }
+  80% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(0.9);
+  }
 }

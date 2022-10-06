@@ -14,7 +14,12 @@ import blackQueen from "../images/queen_b.png";
 import blackKing from "../images/king_b.png";
 import { useEffect, useState } from "react";
 
-function Chessboard() {
+function Chessboard({
+  handleWhiteTime,
+  handleWhiteTimer,
+  isWhiteTiming,
+  handleBlackTime,
+}) {
   const [whitePieceTurn, setWhitePieceTurn] = useState(true);
   let piecesArr = [
     //white pawns
@@ -1081,6 +1086,13 @@ function Chessboard() {
         }
       });
       setPieces([...piecesWithNewLocation]);
+    }
+    if (isWhiteTiming) {
+      handleWhiteTime(5);
+      handleWhiteTimer(false);
+    } else {
+      handleBlackTime(5);
+      handleWhiteTimer(true);
     }
   };
 
