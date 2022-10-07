@@ -28,6 +28,13 @@ body {
 #logo {
   font-size: 1.5rem;
   color: rgb(98, 208, 255);
+}
+
+.beating-class-white {
+  animation: grow 1s infinite linear;
+}
+
+.beating-class-black {
   animation: grow 1s infinite linear;
 }
 
@@ -67,13 +74,17 @@ body {
   align-items: center;
   flex-direction: column;
 }
-#white {
+
+.time {
   font-size: 4rem;
+}
+#white {
+  font-size: 3rem;
   color: rgb(98, 208, 255);
   text-shadow: 0 0 40px white;
 }
 #black {
-  font-size: 4rem;
+  font-size: 3rem;
   color: rgb(0, 0, 0);
   text-shadow: 0 0 40px white;
 }
@@ -168,9 +179,11 @@ body {
     transform: scale(1);
   }
   80% {
-    transform: scale(1.1);
+    transform: scale(1.5);
+    color: red;
+    text-shadow: 0 0 30px rgb(255, 221, 221);
   }
   100% {
-    transform: scale(0.9);
+    transform: scale(0.8);
   }
 }

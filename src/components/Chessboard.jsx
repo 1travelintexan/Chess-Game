@@ -19,6 +19,7 @@ function Chessboard({
   handleWhiteTimer,
   isWhiteTiming,
   handleBlackTime,
+  handleBeatingClass,
 }) {
   const [whitePieceTurn, setWhitePieceTurn] = useState(true);
   let piecesArr = [
@@ -1087,12 +1088,15 @@ function Chessboard({
       });
       setPieces([...piecesWithNewLocation]);
     }
+    //handles the white and black timer by resetting them back to 5 every move & toggling the classes for the beating timers
     if (isWhiteTiming) {
       handleWhiteTime(5);
       handleWhiteTimer(false);
+      handleBeatingClass({ white: undefined, black: "beating-class-black" });
     } else {
       handleBlackTime(5);
       handleWhiteTimer(true);
+      handleBeatingClass({ white: "beating-class-white", black: undefined });
     }
   };
 

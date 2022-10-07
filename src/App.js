@@ -6,13 +6,17 @@ import Logo from "./components/Logo";
 
 function App() {
   const [whiteTime, setWhiteTime] = useState(5);
-  const [whiteTimer, setWhiteTimer] = useState(true);
+  const [isWhiteMoving, setIsWhiteMoving] = useState(true);
   const [blackTime, setBlackTime] = useState(5);
+  const [beatingClass, setBeatingClass] = useState({
+    white: "beating-class-white",
+    black: undefined,
+  });
 
   useEffect(() => {
     let whiteInterval;
     let blackInterval;
-    if (whiteTimer) {
+    if (isWhiteMoving) {
       whiteInterval = setInterval(() => {
         setWhiteTime((prev) => prev - 1);
       }, 1000);
@@ -27,24 +31,37 @@ function App() {
       clearInterval(whiteInterval);
       clearInterval(blackInterval);
     };
-  }, [whiteTimer]);
+  }, [isWhiteMoving]);
 
-  // if (whiteTime <= 0) {
-  //   return <p>lost</p>;
-  // }
+  if (whiteTime <= 0 || blackTime <= 0) {
+    if (isWhiteMoving) {
+      return <p>White Lost on time!</p>;
+    } else {
+      return <p>Black Lost on time!</p>;
+    }
+  }
   return (
     <>
       <Logo />
       <div id="timers-container">
-        <WhiteTimer whiteTime={whiteTime} setWhiteTime={setWhiteTime} />
-        <BlackTimer blackTime={blackTime} setBlackTime={setBlackTime} />
+        <WhiteTimer
+          whiteTime={whiteTime}
+          setWhiteTime={setWhiteTime}
+          beatingClass={beatingClass.white}
+        />
+        <BlackTimer
+          blackTime={blackTime}
+          setBlackTime={setBlackTime}
+          beatingClass={beatingClass.black}
+        />
       </div>
       <div id="App">
         <Chessboard
           handleWhiteTime={setWhiteTime}
           handleBlackTime={setBlackTime}
-          isWhiteTiming={whiteTimer}
-          handleWhiteTimer={setWhiteTimer}
+          isWhiteTiming={isWhiteMoving}
+          handleWhiteTimer={setIsWhiteMoving}
+          handleBeatingClass={setBeatingClass}
         />
       </div>
     </>
