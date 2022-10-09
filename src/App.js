@@ -33,13 +33,13 @@ function App() {
     };
   }, [isWhiteMoving]);
 
-  if (whiteTime <= 0 || blackTime <= 0) {
-    if (isWhiteMoving) {
-      return <p>White Lost on time!</p>;
-    } else {
-      return <p>Black Lost on time!</p>;
-    }
-  }
+  // if (whiteTime <= 0 || blackTime <= 0) {
+  //   if (isWhiteMoving) {
+  //     return <p>White Lost on time!</p>;
+  //   } else {
+  //     return <p>Black Lost on time!</p>;
+  //   }
+  // }
   return (
     <>
       <Logo />

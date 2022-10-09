@@ -144,6 +144,14 @@ body {
   border-radius: 50%;
   box-shadow: 0 0 20px rgb(33, 192, 255);
 }
+.king-in-check {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  border: 7px solid rgba(254, 69, 23, 0.809);
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgb(142, 27, 1);
+}
 
 #letters-row {
   display: flex;

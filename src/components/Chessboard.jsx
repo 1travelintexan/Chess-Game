@@ -22,6 +22,8 @@ function Chessboard({
   handleBeatingClass,
 }) {
   const [whitePieceTurn, setWhitePieceTurn] = useState(true);
+  const [whiteKingInCheck, setWhiteKingInCheck] = useState(false);
+  const [blackKingInCheck, setBlackKingInCheck] = useState(false);
   let piecesArr = [
     //white pawns
     {
@@ -320,7 +322,6 @@ function Chessboard({
         if (allSquares[i] && allSquares[i].image === undefined) {
           availableSquares.push(allSquares[i]);
         } else {
-          console.log("finished");
           break;
         }
       }
@@ -342,7 +343,6 @@ function Chessboard({
         if (allSquares[i] && allSquares[i].image === undefined) {
           availableSquares.push(allSquares[i]);
         } else {
-          console.log("finished");
           break;
         }
       }
@@ -365,7 +365,6 @@ function Chessboard({
         if (allSquares[i] && allSquares[i].image === undefined) {
           availableSquares.push(allSquares[i]);
         } else {
-          console.log("finished");
           break;
         }
       }
@@ -387,7 +386,6 @@ function Chessboard({
         if (allSquares[i] && allSquares[i].image === undefined) {
           availableSquares.push(allSquares[i]);
         } else {
-          console.log("finished");
           break;
         }
       }
@@ -466,7 +464,6 @@ function Chessboard({
         if (allSquares[i] && allSquares[i].image === undefined) {
           availableSquares.push(allSquares[i]);
         } else {
-          console.log("finished");
           break;
         }
       }
@@ -486,7 +483,6 @@ function Chessboard({
         if (allSquares[i] && allSquares[i].image === undefined) {
           availableSquares.push(allSquares[i]);
         } else {
-          console.log("finished");
           break;
         }
       }
@@ -507,7 +503,6 @@ function Chessboard({
         if (allSquares[i] && allSquares[i].image === undefined) {
           availableSquares.push(allSquares[i]);
         } else {
-          console.log("finished");
           break;
         }
       }
@@ -527,7 +522,6 @@ function Chessboard({
         if (allSquares[i] && allSquares[i].image === undefined) {
           availableSquares.push(allSquares[i]);
         } else {
-          console.log("finished");
           break;
         }
       }
@@ -548,9 +542,8 @@ function Chessboard({
       let letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
       let number = JSON.parse(JSON.stringify(Number(position[1])));
       let letter = String.fromCharCode(letterNum);
-
       //<=========up and right available squares with queen==============>
-      while (number <= 8) {
+      while (number <= 8 && letterNum <= 104) {
         letter = String.fromCharCode(letterNum);
         let changingPosition = `${letter}${number}`;
         let square = filterSquares(chessboardCopy, changingPosition);
@@ -559,14 +552,15 @@ function Chessboard({
         allSquares.push(square[0]);
       }
       for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i].type && allSquares[i].type === "king") {
+          availableSquares.push(allSquares[i]);
+        }
         if (allSquares[i] && allSquares[i].image === undefined) {
           availableSquares.push(allSquares[i]);
         } else {
-          console.log("finished");
           break;
         }
       }
-
       //<=========up and left available squares with queen==============>
       //reset the variables to the starting piece position
       letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
@@ -581,14 +575,16 @@ function Chessboard({
         allSquares.push(square[0]);
       }
       for (let i = 1; i < allSquares.length; i++) {
+        console.log("herfe", allSquares[i]);
+        if (allSquares[i].type && allSquares[i].type === "king") {
+          availableSquares.push(allSquares[i]);
+        }
         if (allSquares[i] && allSquares[i].image === undefined) {
           availableSquares.push(allSquares[i]);
         } else {
-          console.log("finished");
           break;
         }
       }
-
       //<=========down and left available squares with queen (diagonal)==============>
       //reset the variables to the starting piece position
       letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
@@ -604,14 +600,15 @@ function Chessboard({
         allSquares.push(square[0]);
       }
       for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i].type && allSquares[i].type === "king") {
+          availableSquares.push(allSquares[i]);
+        }
         if (allSquares[i] && allSquares[i].image === undefined) {
           availableSquares.push(allSquares[i]);
         } else {
-          console.log("finished");
           break;
         }
       }
-
       //<=========down and right available squares with queen (diagonal)==============>
       //reset the variables to the starting piece position
       letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
@@ -626,14 +623,15 @@ function Chessboard({
         allSquares.push(square[0]);
       }
       for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i].type && allSquares[i].type === "king") {
+          availableSquares.push(allSquares[i]);
+        }
         if (allSquares[i] && allSquares[i].image === undefined) {
           availableSquares.push(allSquares[i]);
         } else {
-          console.log("finished");
           break;
         }
       }
-
       //<=========up available squares with queen==============>
       //reset the variables to the starting piece position
       letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
@@ -647,10 +645,12 @@ function Chessboard({
         allSquares.push(square[0]);
       }
       for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i].type && allSquares[i].type === "king") {
+          availableSquares.push(allSquares[i]);
+        }
         if (allSquares[i] && allSquares[i].image === undefined) {
           availableSquares.push(allSquares[i]);
         } else {
-          console.log("finished");
           break;
         }
       }
@@ -667,30 +667,12 @@ function Chessboard({
         allSquares.push(square[0]);
       }
       for (let i = 1; i < allSquares.length; i++) {
-        if (allSquares[i] && allSquares[i].image === undefined) {
+        if (allSquares[i].type && allSquares[i].type === "king") {
           availableSquares.push(allSquares[i]);
-        } else {
-          console.log("finished");
-          break;
         }
-      }
-      //<=========down available squares with queen==============>
-      //reset the variables to the starting piece position
-      letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
-      number = JSON.parse(JSON.stringify(Number(position[1])));
-      allSquares = [];
-      while (number > 0) {
-        letter = String.fromCharCode(letterNum);
-        let changingPosition = `${letter}${number}`;
-        let square = filterSquares(chessboardCopy, changingPosition);
-        number--;
-        allSquares.push(square[0]);
-      }
-      for (let i = 1; i < allSquares.length; i++) {
         if (allSquares[i] && allSquares[i].image === undefined) {
           availableSquares.push(allSquares[i]);
         } else {
-          console.log("finished");
           break;
         }
       }
@@ -707,10 +689,12 @@ function Chessboard({
         allSquares.push(square[0]);
       }
       for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i].type && allSquares[i].type === "king") {
+          availableSquares.push(allSquares[i]);
+        }
         if (allSquares[i] && allSquares[i].image === undefined) {
           availableSquares.push(allSquares[i]);
         } else {
-          console.log("finished");
           break;
         }
       }
@@ -727,17 +711,37 @@ function Chessboard({
         allSquares.push(square[0]);
       }
       for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i].type && allSquares[i].type === "king") {
+          availableSquares.push(allSquares[i]);
+        }
         if (allSquares[i] && allSquares[i].image === undefined) {
           availableSquares.push(allSquares[i]);
         } else {
-          console.log("finished");
           break;
         }
       }
-
+      //mapping over the squares to add all of the possible move classes
       chessboardCopy.map((square) => {
         availableSquares.forEach((availableSquare) => {
-          if (square.place === availableSquare.place) {
+          if (
+            availableSquare.type === "king" &&
+            square.place === availableSquare.place
+          ) {
+            square.possibleMoveClass = "king-in-check";
+            if (
+              availableSquare.type === "king" &&
+              availableSquare.color === "black"
+            ) {
+              setBlackKingInCheck(true);
+            } else {
+              setWhiteKingInCheck(true);
+            }
+          }
+
+          if (
+            square.place === availableSquare.place &&
+            availableSquare.type !== "king"
+          ) {
             square.possibleMoveClass = "possible-move";
           }
         });
