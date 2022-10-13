@@ -13,6 +13,7 @@ function ChessTile({
   possibleMoves,
   whitePieceTurn,
   setWhitePieceTurn,
+  isInCheck,
 }) {
   const [{ isDragging }, drag, preview] = useDrag({
     type: "piece",
@@ -30,7 +31,6 @@ function ChessTile({
       let color = item.id.split("_")[2];
       let type = item.id.split("_")[3];
       const isValidMove = validMove(fromPosition, toPosition, type, color);
-      console.log(isValidMove, color, whitePieceTurn);
       if (isValidMove && color === "white" && whitePieceTurn) {
         movePiece(fromPosition, toPosition, color, type);
         setWhitePieceTurn(!whitePieceTurn);
@@ -40,12 +40,12 @@ function ChessTile({
       }
     },
   });
-
+  //console.log("position", position, "piece", pieceType, isInCheck);
   return white ? (
     <>
       <DragPreviewImage connect={preview} src={image} />
       <div
-        className={`tile white`}
+        className={isInCheck ? "tile king-in-check" : "tile white "}
         ref={drop}
         onClick={(e) => {
           possibleMoves(e, position, pieceType, color);
@@ -67,7 +67,7 @@ function ChessTile({
     <>
       <DragPreviewImage connect={preview} src={image} />
       <div
-        className={`tile`}
+        className={isInCheck ? "king-in-check tile" : "tile "}
         ref={drop}
         onClick={(e) => {
           possibleMoves(e, position, pieceType, color);

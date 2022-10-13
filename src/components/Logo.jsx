@@ -3,7 +3,7 @@ function Logo() {
   return (
     <div id="logo-container">
       <img src={logo} alt="logo" id="logo-image" />
-      <h2 id="logo">Move it -or- Lose it</h2>
+      <h2 id="logo-text">Move it -or- Lose it</h2>
     </div>
   );
 }

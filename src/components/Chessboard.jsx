@@ -22,8 +22,10 @@ function Chessboard({
   handleBeatingClass,
 }) {
   const [whitePieceTurn, setWhitePieceTurn] = useState(true);
-  const [whiteKingInCheck, setWhiteKingInCheck] = useState(false);
-  const [blackKingInCheck, setBlackKingInCheck] = useState(false);
+  const [kingInCheck, setKingInCheck] = useState({
+    whiteKing: false,
+    blackKing: false,
+  });
   let piecesArr = [
     //white pawns
     {
@@ -137,6 +139,7 @@ function Chessboard({
       x: "e",
       y: 1,
       firstMove: true,
+      isInCheck: false,
     },
     //black pawns
     {
@@ -250,6 +253,7 @@ function Chessboard({
       x: "e",
       y: 8,
       firstMove: true,
+      isInCheck: false,
     },
   ];
   const [chessboard, setChessboard] = useState([]);
@@ -257,6 +261,7 @@ function Chessboard({
 
   const numbers = [1, 2, 3, 4, 5, 6, 7, 8];
   const boardLetters = ["a", "b", "c", "d", "e", "f", "g", "h"];
+  let copyPieces = JSON.parse(JSON.stringify(pieces));
 
   useEffect(() => {
     let arr = [];
@@ -270,6 +275,7 @@ function Chessboard({
           let type;
           let isFirstMove;
           let darkSquare;
+          let isInCheck;
           pieces.forEach((piece) => {
             if (piece.x === letters[i] && piece.y === j) {
               image = piece.image;
@@ -277,6 +283,7 @@ function Chessboard({
               type = piece.type;
               isFirstMove = piece.firstMove;
               darkSquare = piece.darkSquare;
+              isInCheck = piece.isInCheck;
             }
           });
 
@@ -288,6 +295,7 @@ function Chessboard({
             isFirstMove,
             possibleMoveClass: "",
             darkSquare,
+            isInCheck,
           });
         }
       }
@@ -296,10 +304,26 @@ function Chessboard({
     setChessboard(arr);
   }, [pieces]);
 
+  // setting king is in check css
+  useEffect(() => {
+    let newArr = copyPieces.map((e) => {
+      if (e.type === "king" && e.color === "white") {
+        e.isInCheck = kingInCheck.whiteKing;
+      } else if (e.type === "king" && e.color === "black") {
+        e.isInCheck = kingInCheck.blackKing;
+      }
+      return e;
+    });
+    setPieces(newArr);
+  }, [kingInCheck.blackKing, kingInCheck.whiteKing]);
   const filterSquares = (arr, position) => {
     return arr.filter((e) => e.place === position);
   };
   const setClassForAvailableSquares = (position, pieceType) => {
+    let kingInCheck = {
+      whiteKing: false,
+      blackKing: false,
+    };
     //<============all bishop possible moves=========>
     if (pieceType === "bishop") {
       let chessboardCopy = [...chessboard];
@@ -536,7 +560,7 @@ function Chessboard({
     }
     //<============all queen possible moves=========>
     if (pieceType === "queen") {
-      let chessboardCopy = [...chessboard];
+      let chessboardCopy = JSON.parse(JSON.stringify(chessboard));
       let allSquares = [];
       let availableSquares = [];
       let letterNum = JSON.parse(JSON.stringify(position.charCodeAt(0)));
@@ -575,7 +599,6 @@ function Chessboard({
         allSquares.push(square[0]);
       }
       for (let i = 1; i < allSquares.length; i++) {
-        console.log("herfe", allSquares[i]);
         if (allSquares[i].type && allSquares[i].type === "king") {
           availableSquares.push(allSquares[i]);
         }
@@ -723,21 +746,19 @@ function Chessboard({
       //mapping over the squares to add all of the possible move classes
       chessboardCopy.map((square) => {
         availableSquares.forEach((availableSquare) => {
+          //<=============write function to handle state of if king is in check then add class to piece
           if (
             availableSquare.type === "king" &&
             square.place === availableSquare.place
           ) {
-            square.possibleMoveClass = "king-in-check";
-            if (
-              availableSquare.type === "king" &&
-              availableSquare.color === "black"
-            ) {
-              setBlackKingInCheck(true);
+            // //sets state for when a king is in check
+            if (availableSquare.color === "black") {
+              kingInCheck.blackKing = true;
             } else {
-              setWhiteKingInCheck(true);
+              kingInCheck.whiteKing = true;
             }
           }
-
+          // puts circle on each square that is available for queen to move
           if (
             square.place === availableSquare.place &&
             availableSquare.type !== "king"
@@ -747,6 +768,7 @@ function Chessboard({
         });
         return square;
       });
+      setChessboard(chessboardCopy);
     }
     //<===========all possible king moves==============>
     if (pieceType === "king") {
@@ -809,6 +831,7 @@ function Chessboard({
         return square;
       });
     }
+    return kingInCheck;
   };
 
   const findIndexOfObject = (arr, coordinate) => {
@@ -1101,6 +1124,30 @@ function Chessboard({
       handleBlackTime(5);
       handleWhiteTimer(true);
       handleBeatingClass({ white: "beating-class-white", black: undefined });
+    }
+
+    //check when you move a piece if the king is now in check
+    let kingIsInCheck = setClassForAvailableSquares(to, pieceType);
+    console.log(
+      "is the king in check hrere",
+      kingIsInCheck.whiteKing,
+      kingIsInCheck.blackKing
+    );
+    if (kingIsInCheck.whiteKing) {
+      console.log("white king in check!");
+      setKingInCheck({ ...kingInCheck, whiteKing: true });
+    } else if (kingIsInCheck.blackKing) {
+      console.log("black king in check!");
+      setKingInCheck({ ...kingInCheck, blackKing: true });
+    } else if (
+      kingIsInCheck.blackKing === true &&
+      kingIsInCheck.whiteKing === true
+    ) {
+      console.log("both kings in check");
+      setKingInCheck({ whiteKing: true, blackKing: true });
+    } else {
+      console.log("neither king in check");
+      setKingInCheck({ whiteKing: false, blackKing: false });
     }
   };
 
@@ -1473,7 +1520,6 @@ function Chessboard({
         return true;
     }
   };
-
   return (
     <div id="chess-page">
       <div id="chessboard-container">
@@ -1513,6 +1559,7 @@ function Chessboard({
                       possibleMoves={handlePossibleMoves}
                       whitePieceTurn={whitePieceTurn}
                       setWhitePieceTurn={setWhitePieceTurn}
+                      isInCheck={e.isInCheck}
                     />
                   </div>
                 );
@@ -1532,6 +1579,7 @@ function Chessboard({
                       possibleMoves={handlePossibleMoves}
                       whitePieceTurn={whitePieceTurn}
                       setWhitePieceTurn={setWhitePieceTurn}
+                      isInCheck={e.isInCheck}
                     />
                   </div>
                 );

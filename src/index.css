@@ -7,6 +7,22 @@ body {
   color: azure;
 }
 
+#modal-modal-title {
+  font-family: "Cinzel", serif;
+  font-size: 2.8rem;
+  text-align: center;
+}
+#modal-modal-description {
+  font-family: "Cinzel", serif;
+  font-size: 1.2rem;
+  text-align: center;
+}
+#box-modal-inputs {
+  padding-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
 :root {
   --chessboard-width: 80vh;
   --tile: 10vh;
@@ -25,7 +41,7 @@ body {
   height: 10vh;
 }
 
-#logo {
+#logo-text {
   font-size: 1.5rem;
   color: rgb(98, 208, 255);
 }
@@ -78,10 +94,10 @@ body {
 .time {
   font-size: 4rem;
 }
-#white {
+#white-player {
   font-size: 3rem;
-  color: rgb(98, 208, 255);
-  text-shadow: 0 0 40px white;
+  color: rgb(238, 244, 247);
+  text-shadow: 0 0 40px rgb(0, 0, 0);
 }
 #black {
   font-size: 3rem;
@@ -105,6 +121,11 @@ body {
   height: var(--chessboard-width);
   border: 3px solid rgb(85, 255, 0);
   box-shadow: 5px 5px 50px rgb(12, 12, 12);
+}
+
+.king-in-check {
+  background-color: rgba(255, 0, 0, 0.89);
+  animation: fade 1.5s infinite linear;
 }
 
 .tile {
@@ -143,14 +164,6 @@ body {
   border: 7px solid rgba(254, 255, 255, 0.611);
   border-radius: 50%;
   box-shadow: 0 0 20px rgb(33, 192, 255);
-}
-.king-in-check {
-  position: absolute;
-  width: 50px;
-  height: 50px;
-  border: 7px solid rgba(254, 69, 23, 0.809);
-  border-radius: 50%;
-  box-shadow: 0 0 20px rgb(142, 27, 1);
 }
 
 #letters-row {
@@ -193,5 +206,17 @@ body {
   }
   100% {
     transform: scale(0.8);
+  }
+}
+
+@keyframes fade {
+  0% {
+    background-color: red;
+  }
+  80% {
+    background-color: rgba(255, 0, 0, 0.277);
+  }
+  100% {
+    background-color: red;
   }
 }

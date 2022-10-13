@@ -3,35 +3,41 @@ import BlackTimer from "./components/BlackTimer";
 import Chessboard from "./components/Chessboard";
 import WhiteTimer from "./components/WhiteTimer";
 import Logo from "./components/Logo";
+import BasicModal from "./components/Modal";
 
 function App() {
-  const [whiteTime, setWhiteTime] = useState(5);
+  const [players, setPlayers] = useState({ white: "", black: "" });
+  const [gameHasStarted, setGameHasStarted] = useState(false);
   const [isWhiteMoving, setIsWhiteMoving] = useState(true);
+  const [whiteTime, setWhiteTime] = useState(5);
   const [blackTime, setBlackTime] = useState(5);
   const [beatingClass, setBeatingClass] = useState({
-    white: "beating-class-white",
+    white: undefined,
     black: undefined,
   });
 
+  //set the beating of the timers
   useEffect(() => {
     let whiteInterval;
     let blackInterval;
-    if (isWhiteMoving) {
-      whiteInterval = setInterval(() => {
-        setWhiteTime((prev) => prev - 1);
-      }, 1000);
-      clearInterval(blackInterval);
-    } else {
-      blackInterval = setInterval(() => {
-        setBlackTime((prev) => prev - 1);
-      }, 1000);
-      clearInterval(whiteInterval);
+    if (gameHasStarted) {
+      if (isWhiteMoving) {
+        whiteInterval = setInterval(() => {
+          setWhiteTime((prev) => prev - 1);
+        }, 1000);
+        clearInterval(blackInterval);
+      } else {
+        blackInterval = setInterval(() => {
+          setBlackTime((prev) => prev - 1);
+        }, 1000);
+        clearInterval(whiteInterval);
+      }
     }
     return () => {
       clearInterval(whiteInterval);
       clearInterval(blackInterval);
     };
-  }, [isWhiteMoving]);
+  }, [isWhiteMoving, gameHasStarted]);
 
   // if (whiteTime <= 0 || blackTime <= 0) {
   //   if (isWhiteMoving) {
@@ -42,17 +48,25 @@ function App() {
   // }
   return (
     <>
+      <BasicModal
+        players={players}
+        setPlayers={setPlayers}
+        setGameHasStarted={setGameHasStarted}
+        setBeatingClass={setBeatingClass}
+      />
       <Logo />
       <div id="timers-container">
         <WhiteTimer
           whiteTime={whiteTime}
           setWhiteTime={setWhiteTime}
           beatingClass={beatingClass.white}
+          whitePlayer={players.white}
         />
         <BlackTimer
           blackTime={blackTime}
           setBlackTime={setBlackTime}
           beatingClass={beatingClass.black}
+          blackPlayer={players.black}
         />
       </div>
       <div id="App">
