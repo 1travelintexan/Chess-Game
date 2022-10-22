@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -24,8 +24,9 @@ export default function BasicModal({
   players,
   setGameHasStarted,
   setBeatingClass,
+  handleShowName,
 }) {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = useState(true);
   const handleClose = () => {
     setOpen(false);
     setGameHasStarted(true);
@@ -38,7 +39,7 @@ export default function BasicModal({
   const handlePlayerNames = (e) => {
     let name = e.target.name;
     let value = e.target.value;
-    console.log(name, value);
+    handleShowName(true);
     setPlayers({ ...players, [name]: value });
   };
   return (

@@ -1,7 +1,7 @@
-function BlackTimer({ blackTime, beatingClass, blackPlayer }) {
+function BlackTimer({ blackTime, beatingClass, blackPlayer, showName }) {
   return (
     <div id="black-timer">
-      <h1 id="black">{blackPlayer}</h1>
+      {showName ? <h1 id="black">{blackPlayer}</h1> : null}
       <h1 className={`time ${beatingClass}`}>0{blackTime}</h1>
     </div>
   );

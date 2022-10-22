@@ -316,14 +316,17 @@ function Chessboard({
     });
     setPieces(newArr);
   }, [kingInCheck.blackKing, kingInCheck.whiteKing]);
+
+  const checkIfKingInCheck = (piece, position) => {
+    console.log("checking");
+  };
   const filterSquares = (arr, position) => {
     return arr.filter((e) => e.place === position);
   };
   const setClassForAvailableSquares = (position, pieceType) => {
-    let kingInCheck = {
-      whiteKing: false,
-      blackKing: false,
-    };
+    let isTheBlackKingInCheck = false;
+    let isTheWhiteKingInCheck = false;
+
     //<============all bishop possible moves=========>
     if (pieceType === "bishop") {
       let chessboardCopy = [...chessboard];
@@ -334,7 +337,7 @@ function Chessboard({
       let letter = String.fromCharCode(letterNum);
 
       //<=========up and right available squares with bishop==============>
-      while (number <= 8) {
+      while (number <= 8 && letterNum <= 104) {
         letter = String.fromCharCode(letterNum);
         let changingPosition = `${letter}${number}`;
         let square = filterSquares(chessboardCopy, changingPosition);
@@ -343,6 +346,10 @@ function Chessboard({
         allSquares.push(square[0]);
       }
       for (let i = 1; i < allSquares.length; i++) {
+        console.log(allSquares[i]);
+        if (allSquares[i].type && allSquares[i].type === "king") {
+          availableSquares.push(allSquares[i]);
+        }
         if (allSquares[i] && allSquares[i].image === undefined) {
           availableSquares.push(allSquares[i]);
         } else {
@@ -364,6 +371,9 @@ function Chessboard({
         allSquares.push(square[0]);
       }
       for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i].type && allSquares[i].type === "king") {
+          availableSquares.push(allSquares[i]);
+        }
         if (allSquares[i] && allSquares[i].image === undefined) {
           availableSquares.push(allSquares[i]);
         } else {
@@ -386,6 +396,9 @@ function Chessboard({
         allSquares.push(square[0]);
       }
       for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i].type && allSquares[i].type === "king") {
+          availableSquares.push(allSquares[i]);
+        }
         if (allSquares[i] && allSquares[i].image === undefined) {
           availableSquares.push(allSquares[i]);
         } else {
@@ -415,6 +428,21 @@ function Chessboard({
       }
       chessboardCopy.map((square) => {
         availableSquares.forEach((availableSquare) => {
+          if (
+            availableSquare.type === "king" &&
+            square.place === availableSquare.place
+          ) {
+            // //sets state for when a king is in check
+            if (availableSquare.color === "black") {
+              console.log("The black king is now in check");
+              setKingInCheck({ ...kingInCheck, blackKing: true });
+              isTheBlackKingInCheck = true;
+            } else {
+              console.log("The white king is now in check");
+              setKingInCheck({ ...kingInCheck, whiteKing: true });
+              isTheWhiteKingInCheck = true;
+            }
+          }
           if (square.place === availableSquare.place) {
             square.possibleMoveClass = "possible-move";
           }
@@ -456,6 +484,24 @@ function Chessboard({
       }
       chessboardCopy.map((square) => {
         allSquares.forEach((position) => {
+          if (
+            square.place === position &&
+            square.type === "king" &&
+            square.color === "white"
+          ) {
+            console.log("The white king is now in check");
+            setKingInCheck({ ...kingInCheck, whiteKing: true });
+            isTheWhiteKingInCheck = true;
+          }
+          if (
+            square.place === position &&
+            square.type === "king" &&
+            square.color === "black"
+          ) {
+            console.log("The black king is now in check");
+            setKingInCheck({ ...kingInCheck, blackKing: true });
+            isTheBlackKingInCheck = true;
+          }
           if (square.place === position && square.image === undefined) {
             square.possibleMoveClass = "possible-move";
           }
@@ -472,10 +518,6 @@ function Chessboard({
       let number = JSON.parse(JSON.stringify(Number(position[1])));
       let letter = String.fromCharCode(letterNum);
 
-      let filterSquares = (arr, position) => {
-        return arr.filter((e) => e.place === position);
-      };
-
       //<=========up available squares with rook==============>
       while (number <= 8) {
         letter = String.fromCharCode(letterNum);
@@ -485,6 +527,9 @@ function Chessboard({
         allSquares.push(square[0]);
       }
       for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i].type && allSquares[i].type === "king") {
+          availableSquares.push(allSquares[i]);
+        }
         if (allSquares[i] && allSquares[i].image === undefined) {
           availableSquares.push(allSquares[i]);
         } else {
@@ -504,6 +549,9 @@ function Chessboard({
         allSquares.push(square[0]);
       }
       for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i].type && allSquares[i].type === "king") {
+          availableSquares.push(allSquares[i]);
+        }
         if (allSquares[i] && allSquares[i].image === undefined) {
           availableSquares.push(allSquares[i]);
         } else {
@@ -524,6 +572,9 @@ function Chessboard({
         allSquares.push(square[0]);
       }
       for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i].type && allSquares[i].type === "king") {
+          availableSquares.push(allSquares[i]);
+        }
         if (allSquares[i] && allSquares[i].image === undefined) {
           availableSquares.push(allSquares[i]);
         } else {
@@ -543,6 +594,9 @@ function Chessboard({
         allSquares.push(square[0]);
       }
       for (let i = 1; i < allSquares.length; i++) {
+        if (allSquares[i].type && allSquares[i].type === "king") {
+          availableSquares.push(allSquares[i]);
+        }
         if (allSquares[i] && allSquares[i].image === undefined) {
           availableSquares.push(allSquares[i]);
         } else {
@@ -551,7 +605,26 @@ function Chessboard({
       }
       chessboardCopy.map((square) => {
         availableSquares.forEach((availableSquare) => {
-          if (square.place === availableSquare.place) {
+          //<=============write function to handle state of if king is in check then add class to piece
+          if (
+            availableSquare.type === "king" &&
+            square.place === availableSquare.place
+          ) {
+            // //sets state for when a king is in check
+            if (availableSquare.color === "black") {
+              console.log("The black king is now in check");
+              setKingInCheck({ ...kingInCheck, blackKing: true });
+              isTheBlackKingInCheck = true;
+            } else {
+              console.log("The white king is now in check");
+              setKingInCheck({ ...kingInCheck, whiteKing: true });
+              isTheWhiteKingInCheck = true;
+            }
+          }
+          if (
+            square.place === availableSquare.place &&
+            availableSquare.type !== "king"
+          ) {
             square.possibleMoveClass = "possible-move";
           }
         });
@@ -753,9 +826,13 @@ function Chessboard({
           ) {
             // //sets state for when a king is in check
             if (availableSquare.color === "black") {
-              kingInCheck.blackKing = true;
+              console.log("The black king is now in check");
+              setKingInCheck({ ...kingInCheck, blackKing: true });
+              isTheBlackKingInCheck = true;
             } else {
-              kingInCheck.whiteKing = true;
+              console.log("The white king is now in check");
+              setKingInCheck({ ...kingInCheck, whiteKing: true });
+              isTheWhiteKingInCheck = true;
             }
           }
           // puts circle on each square that is available for queen to move
@@ -831,7 +908,7 @@ function Chessboard({
         return square;
       });
     }
-    return kingInCheck;
+    return [isTheWhiteKingInCheck, isTheBlackKingInCheck];
   };
 
   const findIndexOfObject = (arr, coordinate) => {
@@ -938,6 +1015,8 @@ function Chessboard({
 
   const handleMovePiece = (from, to, movingPieceColor, pieceType) => {
     let positionInformation = handleCheckPosition(to);
+    console.log("falsdkfja", setClassForAvailableSquares(to, pieceType));
+    setClassForAvailableSquares(to, pieceType);
     //white king short castle
     if (pieceType === "king" && movingPieceColor === "white" && to === "g1") {
       let whiteKing = pieces.filter(
@@ -1127,28 +1206,24 @@ function Chessboard({
     }
 
     //check when you move a piece if the king is now in check
-    let kingIsInCheck = setClassForAvailableSquares(to, pieceType);
-    console.log(
-      "is the king in check hrere",
-      kingIsInCheck.whiteKing,
-      kingIsInCheck.blackKing
-    );
-    if (kingIsInCheck.whiteKing) {
-      console.log("white king in check!");
-      setKingInCheck({ ...kingInCheck, whiteKing: true });
-    } else if (kingIsInCheck.blackKing) {
-      console.log("black king in check!");
-      setKingInCheck({ ...kingInCheck, blackKing: true });
-    } else if (
-      kingIsInCheck.blackKing === true &&
-      kingIsInCheck.whiteKing === true
-    ) {
-      console.log("both kings in check");
-      setKingInCheck({ whiteKing: true, blackKing: true });
-    } else {
-      console.log("neither king in check");
-      setKingInCheck({ whiteKing: false, blackKing: false });
-    }
+    // let kingIsInCheck = setClassForAvailableSquares(to, pieceType);
+
+    // if (kingIsInCheck.whiteKing) {
+    //   console.log("white king in check!");
+    //   setKingInCheck({ ...kingInCheck, whiteKing: true });
+    // } else if (kingIsInCheck.blackKing) {
+    //   console.log("black king in check!");
+    //   setKingInCheck({ ...kingInCheck, blackKing: true });
+    // } else if (
+    //   kingIsInCheck.blackKing === true &&
+    //   kingIsInCheck.whiteKing === true
+    // ) {
+    //   console.log("both kings in check");
+    //   setKingInCheck({ whiteKing: true, blackKing: true });
+    // } else {
+    //   console.log("neither king in check");
+    //   setKingInCheck({ whiteKing: false, blackKing: false });
+    // }
   };
 
   const handleCheckPosition = (position) => {

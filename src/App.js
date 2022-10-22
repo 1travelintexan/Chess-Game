@@ -7,6 +7,7 @@ import BasicModal from "./components/Modal";
 
 function App() {
   const [players, setPlayers] = useState({ white: "", black: "" });
+  const [showNames, setShowNames] = useState(false);
   const [gameHasStarted, setGameHasStarted] = useState(false);
   const [isWhiteMoving, setIsWhiteMoving] = useState(true);
   const [whiteTime, setWhiteTime] = useState(5);
@@ -53,6 +54,7 @@ function App() {
         setPlayers={setPlayers}
         setGameHasStarted={setGameHasStarted}
         setBeatingClass={setBeatingClass}
+        handleShowName={setShowNames}
       />
       <Logo />
       <div id="timers-container">
@@ -61,12 +63,14 @@ function App() {
           setWhiteTime={setWhiteTime}
           beatingClass={beatingClass.white}
           whitePlayer={players.white}
+          showName={showNames}
         />
         <BlackTimer
           blackTime={blackTime}
           setBlackTime={setBlackTime}
           beatingClass={beatingClass.black}
           blackPlayer={players.black}
+          showName={showNames}
         />
       </div>
       <div id="App">
