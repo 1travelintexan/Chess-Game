@@ -28,6 +28,7 @@ export default function BasicModal({
 }) {
   const [open, setOpen] = useState(true);
   const handleClose = () => {
+    handleShowName(true);
     setOpen(false);
     setGameHasStarted(true);
     setBeatingClass({
@@ -39,7 +40,6 @@ export default function BasicModal({
   const handlePlayerNames = (e) => {
     let name = e.target.name;
     let value = e.target.value;
-    handleShowName(true);
     setPlayers({ ...players, [name]: value });
   };
   return (
